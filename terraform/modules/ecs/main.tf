@@ -33,7 +33,7 @@ resource "aws_security_group" "allow_http" {
   }
 
   ingress {
-    from_port = 0
+    from_port = 9000
     to_port   = 9000
     protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
@@ -41,7 +41,7 @@ resource "aws_security_group" "allow_http" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    from_port = 0
+    from_port = 9020
     to_port   = 9020
     protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
@@ -50,7 +50,7 @@ resource "aws_security_group" "allow_http" {
   }
 
   ingress {
-    from_port = 0
+    from_port = 9030
     to_port   = 9030
     protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
