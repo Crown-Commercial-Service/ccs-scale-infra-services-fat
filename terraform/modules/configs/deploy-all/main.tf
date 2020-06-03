@@ -105,6 +105,7 @@ module "fat-buyer-ui" {
   ecs_security_group_id        = module.ecs.ecs_security_group_id
   ecs_task_execution_arn       = module.ecs.ecs_task_execution_arn
   ecs_cluster_id               = module.ecs.ecs_cluster_id
+  ecr_image_id_fat_buyer_ui    = var.ecr_image_id_fat_buyer_ui
 }
 
 module "api-deployment" {

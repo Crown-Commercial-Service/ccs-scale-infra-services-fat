@@ -1,3 +1,7 @@
+variable "ecr_image_id_fat_buyer_ui" {
+  type = string
+}
+
 variable "scale_rest_api_id" {
   type = string
 }

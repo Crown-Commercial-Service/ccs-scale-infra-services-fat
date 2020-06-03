@@ -11,28 +11,8 @@ module "globals" {
 # NLB target group & listener for traffic on port 9030 (Agreements API)
 #######################################################################
 resource "aws_lb_target_group" "target_group_9030" {
-  name        = "SCALE-EU2-${upper(var.environment)}-VPC-FaTBuyerUI-1"
+  name        = "SCALE-EU2-${upper(var.environment)}-VPC-FaTBuyerUI"
   port        = 9030
-  protocol    = "TCP"
-  target_type = "ip"
-  vpc_id      = var.vpc_id
-
-  stickiness {
-    type    = "lb_cookie"
-    enabled = false
-  }
-
-  tags = {
-    Project     = module.globals.project_name
-    Environment = upper(var.environment)
-    Cost_Code   = module.globals.project_cost_code
-    AppType     = "LOADBALANCER"
-  }
-}
-
-resource "aws_lb_target_group" "target_group_9031" {
-  name        = "SCALE-EU2-${upper(var.environment)}-VPC-FaTBuyerUI-2"
-  port        = 9031
   protocol    = "TCP"
   target_type = "ip"
   vpc_id      = var.vpc_id
@@ -99,7 +79,7 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
     [
       {
         "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_FaTBuyerUI",
-        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/fat-buyer-ui:9687b45-candidate",
+        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/fat-buyer-ui:${var.ecr_image_id_fat_buyer_ui}",
         "requires_compatibilities": "FARGATE",
         "cpu": 256,
         "memory": 512,
