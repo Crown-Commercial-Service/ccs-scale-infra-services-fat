@@ -98,7 +98,21 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
               "awslogs-region": "eu-west-2",
               "awslogs-stream-prefix": "fargate-fat-buyer-ui"
           }
-        }
+        },
+        "environment" : [
+          {
+          "name": "ENVIRONMENT",
+          "value": "${var.environment}"
+          },
+          {
+          "name": "AGREEMENTS_SERVICE_ROOT_URL",
+          "value": "${var.agreements_invoke_url}"
+          },
+          {
+          "name": "GUIDED_MATCH_SERVICE_ROOT_URL",
+          "value": "${var.api_invoke_url}"
+          }
+        ]
       }
     ]
 DEFINITION

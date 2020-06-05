@@ -44,6 +44,10 @@ data "aws_ssm_parameter" "lb_private_dns" {
   name = "${lower(var.environment)}-lb-private-dns"
 }
 
+data "aws_ssm_parameter" "agreements_invoke_url" {
+  name = "${lower(var.environment)}-agreements-service-root-url"
+}
+
 module "ecs" {
   source      = "../../ecs"
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
@@ -89,6 +93,17 @@ module "guided-match" {
   ecs_cluster_id               = module.ecs.ecs_cluster_id
 }
 
+module "api-deployment" {
+  source            = "../../services/api-deployment"
+  environment       = var.environment
+  scale_rest_api_id = module.api.scale_rest_api_id
+
+  // Simulate depends_on:
+  decision_tree_api_gateway_integration = module.decision-tree.decision_tree_api_gateway_integration
+  guided_match_api_gateway_integration  = module.guided-match.guided_match_api_gateway_integration
+}
+
+
 module "fat-buyer-ui" {
   source                       = "../../services/fat-buyer-ui"
   environment                  = var.environment
@@ -106,14 +121,6 @@ module "fat-buyer-ui" {
   ecs_task_execution_arn       = module.ecs.ecs_task_execution_arn
   ecs_cluster_id               = module.ecs.ecs_cluster_id
   ecr_image_id_fat_buyer_ui    = var.ecr_image_id_fat_buyer_ui
-}
-
-module "api-deployment" {
-  source            = "../../services/api-deployment"
-  environment       = var.environment
-  scale_rest_api_id = module.api.scale_rest_api_id
-
-  // Simulate depends_on:
-  decision_tree_api_gateway_integration = module.decision-tree.decision_tree_api_gateway_integration
-  guided_match_api_gateway_integration  = module.guided-match.guided_match_api_gateway_integration
+  agreements_invoke_url        = data.aws_ssm_parameter.agreements_invoke_url.value
+  api_invoke_url               = module.api-deployment.api_invoke_url
 }
