@@ -58,3 +58,10 @@ variable "environment" {
   type = string
 }
 
+variable "api_invoke_url" {
+  type = string
+}
+
+variable "agreements_invoke_url" {
+  type = string
+}
