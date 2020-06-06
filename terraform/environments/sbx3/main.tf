@@ -6,7 +6,7 @@
 terraform {
   backend "s3" {
     bucket         = "scale-terraform-state"
-    key            = "ccs-scale-infra-services-sbx3"
+    key            = "ccs-scale-infra-services-fat-sbx3"
     region         = "eu-west-2"
     dynamodb_table = "scale_terraform_state_lock"
     encrypt        = true

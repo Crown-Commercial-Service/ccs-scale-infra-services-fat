@@ -6,7 +6,7 @@
 terraform {
   backend "s3" {
     bucket         = "scale-terraform-state"
-    key            = "ccs-scale-infra-services-sbx5"
+    key            = "ccs-scale-infra-services-fat-sbx5"
     region         = "eu-west-2"
     dynamodb_table = "scale_terraform_state_lock"
     encrypt        = true
@@ -32,5 +32,4 @@ module "deploy" {
   environment    = local.environment
 
   ecr_image_id_fat_buyer_ui = "latest"
-  //ecr_image_id_fat_buyer_ui = "795d862-candidate"
 }
