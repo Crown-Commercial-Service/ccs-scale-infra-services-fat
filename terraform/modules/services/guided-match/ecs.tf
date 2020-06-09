@@ -96,7 +96,21 @@ resource "aws_ecs_task_definition" "guided_match" {
               "awslogs-region": "eu-west-2",
               "awslogs-stream-prefix": "fargate-guided-match"
           }
-        }
+        },
+        "environment" : [
+          {
+          "name": "spring.datasource.username",
+          "value": "${var.guided_match_db_username}"
+          },
+          {
+          "name": "spring.datasource.password",
+          "value": "${var.guided_match_db_password}"
+          },
+          {
+          "name": "spring.datasource.url",
+          "value": "jdbc:postgresql://${var.guided_match_db_endpoint}:5432/guided-match"
+          }
+        ]
       }
     ]
 DEFINITION

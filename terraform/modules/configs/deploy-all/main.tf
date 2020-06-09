@@ -48,6 +48,18 @@ data "aws_ssm_parameter" "agreements_invoke_url" {
   name = "${lower(var.environment)}-agreements-service-root-url"
 }
 
+data "aws_ssm_parameter" "guided_match_db_endpoint" {
+  name = "${lower(var.environment)}-guided-match-db-endpoint"
+}
+
+data "aws_ssm_parameter" "guided_match_db_username" {
+  name = "${lower(var.environment)}-guided-match-db-master-username"
+}
+
+data "aws_ssm_parameter" "guided_match_db_password" {
+  name = "${lower(var.environment)}-guided-match-db-master-password"
+}
+
 module "ecs" {
   source      = "../../ecs"
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
@@ -91,6 +103,9 @@ module "guided-match" {
   ecs_security_group_id        = module.ecs.ecs_security_group_id
   ecs_task_execution_arn       = module.ecs.ecs_task_execution_arn
   ecs_cluster_id               = module.ecs.ecs_cluster_id
+  guided_match_db_endpoint     = data.aws_ssm_parameter.guided_match_db_endpoint.value
+  guided_match_db_username     = data.aws_ssm_parameter.guided_match_db_username.value
+  guided_match_db_password     = data.aws_ssm_parameter.guided_match_db_password.value
 }
 
 module "api-deployment" {
