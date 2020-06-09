@@ -108,7 +108,7 @@ resource "aws_ecs_task_definition" "guided_match" {
           },
           {
           "name": "spring.datasource.url",
-          "value": "jdbc:postgresql://${var.guided_match_db_endpoint}:5432/guided-match"
+          "value": "jdbc:postgresql://${var.guided_match_db_endpoint}:5432/guided_match"
           }
         ]
       }
