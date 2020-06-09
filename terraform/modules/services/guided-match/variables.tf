@@ -50,3 +50,14 @@ variable "environment" {
   type = string
 }
 
+variable "guided_match_db_endpoint" {
+  type = string
+}
+
+variable "guided_match_db_username" {
+  type = string
+}
+
+variable "guided_match_db_password" {
+  type = string
+}
