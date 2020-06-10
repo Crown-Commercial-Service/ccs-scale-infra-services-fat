@@ -77,7 +77,7 @@ resource "aws_ecs_task_definition" "decision_tree" {
     [
     {
         "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_DecisionTree",
-        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-service:00ef1a1-snapshot",
+        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-service:d985aaa-candidate",
         "requires_compatibilities": "FARGATE",
         "cpu": 256,
         "memory": 512,
