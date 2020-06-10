@@ -77,7 +77,7 @@ resource "aws_ecs_task_definition" "guided_match" {
     [
       {
         "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_GuidedMatch",
-        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/guided-match-service:76b17f3-candidate",
+        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/guided-match-service:9f258bb-snapshot",
         "requires_compatibilities": "FARGATE",
         "cpu": 256,
         "memory": 512,

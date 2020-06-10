@@ -77,7 +77,7 @@ resource "aws_ecs_task_definition" "decision_tree" {
     [
     {
         "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_DecisionTree",
-        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-service:d3e5bfb-candidate",
+        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-service:00ef1a1-snapshot",
         "requires_compatibilities": "FARGATE",
         "cpu": 256,
         "memory": 512,
@@ -99,25 +99,8 @@ resource "aws_ecs_task_definition" "decision_tree" {
         }
       },
       {
-          "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_LookupService",
-          "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/lookup-service:5b5b654-candidate",
-          "requires_compatibilities": "FARGATE",
-          "cpu": 256,
-          "memory": 512,
-          "essential": true,
-          "networkMode": "awsvpc",
-          "logConfiguration": {
-            "logDriver": "awslogs",
-            "options": {
-                "awslogs-group": "${aws_cloudwatch_log_group.fargate_scale.name}",
-                "awslogs-region": "eu-west-2",
-                "awslogs-stream-prefix": "fargate-lookup-service"
-            }
-          }
-      },
-      {
           "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_DecisionTreeDB",
-          "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-db:2a80cc3-candidate",
+          "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-db:46d1abd-candidate",
           "requires_compatibilities": "FARGATE",
           "cpu": 512,
           "memory": 1024,
