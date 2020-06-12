@@ -86,6 +86,12 @@ module "decision-tree" {
   ecs_security_group_id        = module.ecs.ecs_security_group_id
   ecs_task_execution_arn       = module.ecs.ecs_task_execution_arn
   ecs_cluster_id               = module.ecs.ecs_cluster_id
+  decision_tree_cpu            = var.decision_tree_cpu
+  decision_tree_memory         = var.decision_tree_memory
+  decision_tree_service_cpu    = var.decision_tree_service_cpu
+  decision_tree_service_memory = var.decision_tree_service_memory
+  decision_tree_db_cpu         = var.decision_tree_db_cpu
+  decision_tree_db_memory      = var.decision_tree_db_memory
 }
 
 module "guided-match" {
@@ -106,6 +112,8 @@ module "guided-match" {
   guided_match_db_endpoint     = data.aws_ssm_parameter.guided_match_db_endpoint.value
   guided_match_db_username     = data.aws_ssm_parameter.guided_match_db_username.value
   guided_match_db_password     = data.aws_ssm_parameter.guided_match_db_password.value
+  guided_match_cpu             = var.guided_match_cpu
+  guided_match_memory          = var.guided_match_memory
 }
 
 module "api-deployment" {
