@@ -69,8 +69,8 @@ resource "aws_ecs_task_definition" "decision_tree" {
   family                   = "decision-tree"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = 1024
-  memory                   = 2048
+  cpu                      = var.decision_tree_cpu
+  memory                   = var.decision_tree_memory
   execution_role_arn       = var.ecs_task_execution_arn
 
   container_definitions = <<DEFINITION
@@ -79,8 +79,8 @@ resource "aws_ecs_task_definition" "decision_tree" {
         "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_DecisionTree",
         "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-service:d985aaa-candidate",
         "requires_compatibilities": "FARGATE",
-        "cpu": 256,
-        "memory": 512,
+        "cpu": ${var.decision_tree_service_cpu},
+        "memory": ${var.decision_tree_service_memory},
         "essential": true,
         "networkMode": "awsvpc",
         "portMappings": [
@@ -102,8 +102,8 @@ resource "aws_ecs_task_definition" "decision_tree" {
           "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_DecisionTreeDB",
           "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-db:46d1abd-candidate",
           "requires_compatibilities": "FARGATE",
-          "cpu": 512,
-          "memory": 1024,
+          "cpu": ${var.decision_tree_db_cpu},
+          "memory": ${var.decision_tree_db_memory},
           "essential": true,
           "networkMode": "awsvpc",
           "portMappings": [

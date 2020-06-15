@@ -61,3 +61,11 @@ variable "guided_match_db_username" {
 variable "guided_match_db_password" {
   type = string
 }
+
+variable "guided_match_cpu" {
+  type = number
+}
+
+variable "guided_match_memory" {
+  type = number
+}

@@ -69,8 +69,8 @@ resource "aws_ecs_task_definition" "guided_match" {
   family                   = "guided-match"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = 512
-  memory                   = 1024
+  cpu                      = var.guided_match_cpu
+  memory                   = var.guided_match_memory
   execution_role_arn       = var.ecs_task_execution_arn
 
   container_definitions = <<DEFINITION
@@ -79,8 +79,8 @@ resource "aws_ecs_task_definition" "guided_match" {
         "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_GuidedMatch",
         "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/guided-match-service:76b17f3-candidate",
         "requires_compatibilities": "FARGATE",
-        "cpu": 256,
-        "memory": 512,
+        "cpu": ${var.guided_match_cpu},
+        "memory": ${var.guided_match_memory},
         "essential": true,
         "networkMode": "awsvpc",
         "portMappings": [

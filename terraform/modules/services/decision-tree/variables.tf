@@ -50,3 +50,26 @@ variable "environment" {
   type = string
 }
 
+variable "decision_tree_cpu" {
+  type = number
+}
+
+variable "decision_tree_memory" {
+  type = number
+}
+
+variable "decision_tree_service_cpu" {
+  type = number
+}
+
+variable "decision_tree_service_memory" {
+  type = number
+}
+
+variable "decision_tree_db_cpu" {
+  type = number
+}
+
+variable "decision_tree_db_memory" {
+  type = number
+}
