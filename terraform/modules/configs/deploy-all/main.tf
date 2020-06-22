@@ -84,8 +84,13 @@ data "aws_ssm_parameter" "decision_tree_db_service_account_password" {
   name = "${lower(var.environment)}-decision-tree-db-service-account-password"
 }
 
+
 data "aws_ssm_parameter" "cidr_block_vpc" {
   name = "${lower(var.environment)}-cidr-block-vpc"
+}
+
+data "aws_ssm_parameter" "shared_api_key" {
+  name = "${lower(var.environment)}-fat-buyer-ui-shared-api-key"
 }
 
 module "ecs" {
@@ -165,6 +170,8 @@ module "api-deployment" {
   source            = "../../services/api-deployment"
   environment       = var.environment
   scale_rest_api_id = module.api.scale_rest_api_id
+  api_rate_limit    = var.api_rate_limit
+  api_burst_limit   = var.api_burst_limit
 
   // Simulate depends_on:
   decision_tree_api_gateway_integration = module.decision-tree.decision_tree_api_gateway_integration
@@ -184,4 +191,6 @@ module "fat-buyer-ui" {
   ecr_image_id_fat_buyer_ui = var.ecr_image_id_fat_buyer_ui
   agreements_invoke_url     = data.aws_ssm_parameter.agreements_invoke_url.value
   api_invoke_url            = module.api-deployment.api_invoke_url
+  shared_api_key            = data.aws_ssm_parameter.shared_api_key.value
+  fat_api_key               = module.api-deployment.fat_api_key
 }

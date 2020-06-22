@@ -111,6 +111,14 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
           {
           "name": "GUIDED_MATCH_SERVICE_ROOT_URL",
           "value": "${var.api_invoke_url}"
+          },
+          {
+          "name": "AGREEMENTS_SERVICE_API_KEY",
+          "value": "${var.shared_api_key}"
+          },
+          {
+          "name": "GUIDED_MATCH_SERVICE_API_KEY",
+          "value": "${var.fat_api_key}"
           }
         ]
       }

@@ -26,10 +26,11 @@ module "guided_match_cors" {
 }
 
 resource "aws_api_gateway_method" "guided_match_proxy" {
-  rest_api_id   = var.scale_rest_api_id
-  resource_id   = aws_api_gateway_resource.guided_match_proxy.id
-  http_method   = "ANY"
-  authorization = "NONE"
+  rest_api_id      = var.scale_rest_api_id
+  resource_id      = aws_api_gateway_resource.guided_match_proxy.id
+  http_method      = "ANY"
+  authorization    = "NONE"
+  api_key_required = true
 
   request_parameters = {
     "method.request.path.proxy" = false
