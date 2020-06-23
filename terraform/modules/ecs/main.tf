@@ -58,6 +58,15 @@ resource "aws_security_group" "allow_http" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port = 7687
+    to_port   = 7687
+    protocol  = "tcp"
+    # Please restrict your ingress to only necessary IPs and ports.
+    # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port = 0
     to_port   = 65535
@@ -117,7 +126,8 @@ resource "aws_iam_policy" "ecs_task_execution" {
         "ecr:GetDownloadUrlForLayer",
         "ecr:BatchGetImage",
         "logs:CreateLogStream",
-        "logs:PutLogEvents"
+        "logs:PutLogEvents",
+        "ssm:GetParameters"
       ],
       "Resource": "*"
     }

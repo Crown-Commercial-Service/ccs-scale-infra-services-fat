@@ -30,8 +30,6 @@ module "deploy" {
   source                       = "../../modules/configs/deploy-all"
   aws_account_id               = data.aws_ssm_parameter.aws_account_id.value
   environment                  = local.environment
-  decision_tree_cpu            = 2048
-  decision_tree_memory         = 4096
   decision_tree_service_cpu    = 1024
   decision_tree_service_memory = 2048
   decision_tree_db_cpu         = 1024

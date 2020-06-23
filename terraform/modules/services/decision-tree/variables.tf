@@ -46,16 +46,12 @@ variable "lb_private_dns" {
   type = string
 }
 
-variable "environment" {
+variable "lb_private_db_dns" {
   type = string
 }
 
-variable "decision_tree_cpu" {
-  type = number
-}
-
-variable "decision_tree_memory" {
-  type = number
+variable "environment" {
+  type = string
 }
 
 variable "decision_tree_service_cpu" {
@@ -66,10 +62,10 @@ variable "decision_tree_service_memory" {
   type = number
 }
 
-variable "decision_tree_db_cpu" {
-  type = number
+variable "decision_tree_db_service_account_username_arn" {
+  type = string
 }
 
-variable "decision_tree_db_memory" {
-  type = number
+variable "decision_tree_db_service_account_password_arn" {
+  type = string
 }
