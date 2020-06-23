@@ -40,8 +40,16 @@ data "aws_ssm_parameter" "lb_private_arn" {
   name = "${lower(var.environment)}-lb-private-arn"
 }
 
+data "aws_ssm_parameter" "lb_private_db_arn" {
+  name = "${lower(var.environment)}-lb-private-db-arn"
+}
+
 data "aws_ssm_parameter" "lb_private_dns" {
   name = "${lower(var.environment)}-lb-private-dns"
+}
+
+data "aws_ssm_parameter" "lb_private_db_dns" {
+  name = "${lower(var.environment)}-lb-private-db-dns"
 }
 
 data "aws_ssm_parameter" "agreements_invoke_url" {
@@ -60,6 +68,22 @@ data "aws_ssm_parameter" "guided_match_db_password" {
   name = "${lower(var.environment)}-guided-match-db-master-password"
 }
 
+data "aws_ssm_parameter" "decision_tree_db_admin_username" {
+  name = "${lower(var.environment)}-decision-tree-db-admin-username"
+}
+
+data "aws_ssm_parameter" "decision_tree_db_admin_password" {
+  name = "${lower(var.environment)}-decision-tree-db-admin-password"
+}
+
+data "aws_ssm_parameter" "decision_tree_db_service_account_username" {
+  name = "${lower(var.environment)}-decision-tree-db-service-account-username"
+}
+
+data "aws_ssm_parameter" "decision_tree_db_service_account_password" {
+  name = "${lower(var.environment)}-decision-tree-db-service-account-password"
+}
+
 module "ecs" {
   source      = "../../ecs"
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
@@ -72,26 +96,42 @@ module "api" {
 }
 
 module "decision-tree" {
-  source                       = "../../services/decision-tree"
-  environment                  = var.environment
-  vpc_id                       = data.aws_ssm_parameter.vpc_id.value
-  private_app_subnet_ids       = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
-  private_db_subnet_ids        = split(",", data.aws_ssm_parameter.private_db_subnet_ids.value)
-  vpc_link_id                  = data.aws_ssm_parameter.vpc_link_id.value
-  lb_private_arn               = data.aws_ssm_parameter.lb_private_arn.value
-  lb_private_dns               = data.aws_ssm_parameter.lb_private_dns.value
-  scale_rest_api_id            = module.api.scale_rest_api_id
-  scale_rest_api_execution_arn = module.api.scale_rest_api_execution_arn
-  parent_resource_id           = module.api.parent_resource_id
-  ecs_security_group_id        = module.ecs.ecs_security_group_id
-  ecs_task_execution_arn       = module.ecs.ecs_task_execution_arn
-  ecs_cluster_id               = module.ecs.ecs_cluster_id
-  decision_tree_cpu            = var.decision_tree_cpu
-  decision_tree_memory         = var.decision_tree_memory
-  decision_tree_service_cpu    = var.decision_tree_service_cpu
-  decision_tree_service_memory = var.decision_tree_service_memory
-  decision_tree_db_cpu         = var.decision_tree_db_cpu
-  decision_tree_db_memory      = var.decision_tree_db_memory
+  source                                        = "../../services/decision-tree"
+  environment                                   = var.environment
+  vpc_id                                        = data.aws_ssm_parameter.vpc_id.value
+  private_app_subnet_ids                        = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  private_db_subnet_ids                         = split(",", data.aws_ssm_parameter.private_db_subnet_ids.value)
+  vpc_link_id                                   = data.aws_ssm_parameter.vpc_link_id.value
+  lb_private_arn                                = data.aws_ssm_parameter.lb_private_arn.value
+  lb_private_dns                                = data.aws_ssm_parameter.lb_private_dns.value
+  lb_private_db_dns                             = data.aws_ssm_parameter.lb_private_db_dns.value
+  scale_rest_api_id                             = module.api.scale_rest_api_id
+  scale_rest_api_execution_arn                  = module.api.scale_rest_api_execution_arn
+  parent_resource_id                            = module.api.parent_resource_id
+  ecs_security_group_id                         = module.ecs.ecs_security_group_id
+  ecs_task_execution_arn                        = module.ecs.ecs_task_execution_arn
+  ecs_cluster_id                                = module.ecs.ecs_cluster_id
+  decision_tree_service_cpu                     = var.decision_tree_service_cpu
+  decision_tree_service_memory                  = var.decision_tree_service_memory
+  decision_tree_db_service_account_username_arn = data.aws_ssm_parameter.decision_tree_db_service_account_username.arn
+  decision_tree_db_service_account_password_arn = data.aws_ssm_parameter.decision_tree_db_service_account_password.arn
+}
+
+module "decision-tree-db" {
+  source                                        = "../../services/decision-tree-db"
+  environment                                   = var.environment
+  vpc_id                                        = data.aws_ssm_parameter.vpc_id.value
+  private_db_subnet_ids                         = split(",", data.aws_ssm_parameter.private_db_subnet_ids.value)
+  lb_private_db_arn                             = data.aws_ssm_parameter.lb_private_db_arn.value
+  ecs_security_group_id                         = module.ecs.ecs_security_group_id
+  ecs_task_execution_arn                        = module.ecs.ecs_task_execution_arn
+  ecs_cluster_id                                = module.ecs.ecs_cluster_id
+  decision_tree_db_cpu                          = var.decision_tree_db_cpu
+  decision_tree_db_memory                       = var.decision_tree_db_memory
+  decision_tree_db_admin_username_arn           = data.aws_ssm_parameter.decision_tree_db_admin_username.arn
+  decision_tree_db_admin_password_arn           = data.aws_ssm_parameter.decision_tree_db_admin_password.arn
+  decision_tree_db_service_account_username_arn = data.aws_ssm_parameter.decision_tree_db_service_account_username.arn
+  decision_tree_db_service_account_password_arn = data.aws_ssm_parameter.decision_tree_db_service_account_password.arn
 }
 
 module "guided-match" {
@@ -128,22 +168,15 @@ module "api-deployment" {
 
 
 module "fat-buyer-ui" {
-  source                       = "../../services/fat-buyer-ui"
-  environment                  = var.environment
-  vpc_id                       = data.aws_ssm_parameter.vpc_id.value
-  private_app_subnet_ids       = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
-  private_db_subnet_ids        = split(",", data.aws_ssm_parameter.private_db_subnet_ids.value)
-  vpc_link_id                  = data.aws_ssm_parameter.vpc_link_id.value
-  lb_private_arn               = data.aws_ssm_parameter.lb_private_arn.value
-  lb_private_dns               = data.aws_ssm_parameter.lb_private_dns.value
-  lb_public_arn                = data.aws_ssm_parameter.lb_public_arn.value
-  scale_rest_api_id            = module.api.scale_rest_api_id
-  scale_rest_api_execution_arn = module.api.scale_rest_api_execution_arn
-  parent_resource_id           = module.api.parent_resource_id
-  ecs_security_group_id        = module.ecs.ecs_security_group_id
-  ecs_task_execution_arn       = module.ecs.ecs_task_execution_arn
-  ecs_cluster_id               = module.ecs.ecs_cluster_id
-  ecr_image_id_fat_buyer_ui    = var.ecr_image_id_fat_buyer_ui
-  agreements_invoke_url        = data.aws_ssm_parameter.agreements_invoke_url.value
-  api_invoke_url               = module.api-deployment.api_invoke_url
+  source                    = "../../services/fat-buyer-ui"
+  environment               = var.environment
+  vpc_id                    = data.aws_ssm_parameter.vpc_id.value
+  private_app_subnet_ids    = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
+  lb_public_arn             = data.aws_ssm_parameter.lb_public_arn.value
+  ecs_security_group_id     = module.ecs.ecs_security_group_id
+  ecs_task_execution_arn    = module.ecs.ecs_task_execution_arn
+  ecs_cluster_id            = module.ecs.ecs_cluster_id
+  ecr_image_id_fat_buyer_ui = var.ecr_image_id_fat_buyer_ui
+  agreements_invoke_url     = data.aws_ssm_parameter.agreements_invoke_url.value
+  api_invoke_url            = module.api-deployment.api_invoke_url
 }
