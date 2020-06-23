@@ -84,10 +84,24 @@ data "aws_ssm_parameter" "decision_tree_db_service_account_password" {
   name = "${lower(var.environment)}-decision-tree-db-service-account-password"
 }
 
+data "aws_ssm_parameter" "cidr_blocks_app" {
+  name = "${lower(var.environment)}-cidr-blocks-app"
+}
+
+data "aws_ssm_parameter" "cidr_blocks_db" {
+  name = "${lower(var.environment)}-cidr-blocks-db"
+}
+
+data "aws_ssm_parameter" "cidr_block_vpc" {
+  name = "${lower(var.environment)}-cidr-block-vpc"
+}
+
 module "ecs" {
-  source      = "../../ecs"
-  vpc_id      = data.aws_ssm_parameter.vpc_id.value
-  environment = var.environment
+  source             = "../../ecs"
+  vpc_id             = data.aws_ssm_parameter.vpc_id.value
+  environment        = var.environment
+  cidr_block_vpc     = data.aws_ssm_parameter.cidr_block_vpc.value
+  cidr_blocks_app_db = flatten([split(",", data.aws_ssm_parameter.cidr_blocks_app.value), split(",", data.aws_ssm_parameter.cidr_blocks_db.value)])
 }
 
 module "api" {
