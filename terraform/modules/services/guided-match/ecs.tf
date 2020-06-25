@@ -69,18 +69,18 @@ resource "aws_ecs_task_definition" "guided_match" {
   family                   = "guided-match"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = 512
-  memory                   = 1024
+  cpu                      = var.guided_match_cpu
+  memory                   = var.guided_match_memory
   execution_role_arn       = var.ecs_task_execution_arn
 
   container_definitions = <<DEFINITION
     [
       {
         "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_GuidedMatch",
-        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/guided-match-service:76b17f3-candidate",
+        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/guided-match-service:c54e215-candidate",
         "requires_compatibilities": "FARGATE",
-        "cpu": 256,
-        "memory": 512,
+        "cpu": ${var.guided_match_cpu},
+        "memory": ${var.guided_match_memory},
         "essential": true,
         "networkMode": "awsvpc",
         "portMappings": [
@@ -96,7 +96,25 @@ resource "aws_ecs_task_definition" "guided_match" {
               "awslogs-region": "eu-west-2",
               "awslogs-stream-prefix": "fargate-guided-match"
           }
-        }
+        },
+        "environment" : [
+          {
+          "name": "spring.datasource.username",
+          "value": "${var.guided_match_db_username}"
+          },
+          {
+          "name": "spring.datasource.password",
+          "value": "${var.guided_match_db_password}"
+          },
+          {
+          "name": "spring.datasource.url",
+          "value": "jdbc:postgresql://${var.guided_match_db_endpoint}:5432/guided_match"
+          },
+          {
+          "name": "external.decision-tree-service.url",
+          "value": "http://${var.lb_private_dns}:9000"
+          }
+        ]
       }
     ]
 DEFINITION

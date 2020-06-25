@@ -12,7 +12,7 @@ module "globals" {
 # NLB target group & listener for traffic on port 9000 (DecisionTree API)
 #######################################################################
 resource "aws_lb_target_group" "target_group_9000" {
-  name        = "SCALE-EU2-${upper(var.environment)}-VPC-TG-DTree"
+  name        = "SCALE-EU2-${upper(var.environment)}-VPC-TG-DTreeSvc"
   port        = 9000
   protocol    = "TCP"
   target_type = "ip"
@@ -29,6 +29,10 @@ resource "aws_lb_target_group" "target_group_9000" {
     Cost_Code   = module.globals.project_cost_code
     AppType     = "LOADBALANCER"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_lb_listener" "port_9000" {
@@ -42,10 +46,14 @@ resource "aws_lb_listener" "port_9000" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group_9000.arn
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_ecs_service" "decision_tree" {
-  name             = "SCALE-EU2-${upper(var.environment)}-APP-ECS_Service_DecisionTree"
+  name             = "SCALE-EU2-${upper(var.environment)}-APP-ECS_Service_DecisionTreeSvc"
   cluster          = var.ecs_cluster_id
   task_definition  = aws_ecs_task_definition.decision_tree.arn
   launch_type      = "FARGATE"
@@ -60,27 +68,27 @@ resource "aws_ecs_service" "decision_tree" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.target_group_9000.arn
-    container_name   = "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_DecisionTree"
+    container_name   = "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_DecisionTreeSvc"
     container_port   = 9000
   }
 }
 
 resource "aws_ecs_task_definition" "decision_tree" {
-  family                   = "decision-tree"
+  family                   = "decision-tree-service"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = 1024
-  memory                   = 2048
+  cpu                      = var.decision_tree_service_cpu
+  memory                   = var.decision_tree_service_memory
   execution_role_arn       = var.ecs_task_execution_arn
 
   container_definitions = <<DEFINITION
     [
     {
-        "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_DecisionTree",
-        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-service:d3e5bfb-candidate",
+        "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_DecisionTreeSvc",
+        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-service:e846d61-candidate",
         "requires_compatibilities": "FARGATE",
-        "cpu": 256,
-        "memory": 512,
+        "cpu": ${var.decision_tree_service_cpu},
+        "memory": ${var.decision_tree_service_memory},
         "essential": true,
         "networkMode": "awsvpc",
         "portMappings": [
@@ -96,51 +104,25 @@ resource "aws_ecs_task_definition" "decision_tree" {
               "awslogs-region": "eu-west-2",
               "awslogs-stream-prefix": "fargate-decision-tree"
           }
-        }
-      },
-      {
-          "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_LookupService",
-          "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/lookup-service:5b5b654-candidate",
-          "requires_compatibilities": "FARGATE",
-          "cpu": 256,
-          "memory": 512,
-          "essential": true,
-          "networkMode": "awsvpc",
-          "logConfiguration": {
-            "logDriver": "awslogs",
-            "options": {
-                "awslogs-group": "${aws_cloudwatch_log_group.fargate_scale.name}",
-                "awslogs-region": "eu-west-2",
-                "awslogs-stream-prefix": "fargate-lookup-service"
+        },
+        "secrets": [
+            {
+                "name": "spring.data.neo4j.username",
+                "valueFrom": "${var.decision_tree_db_service_account_username_arn}"
+            },
+            {
+                "name": "spring.data.neo4j.password",
+                "valueFrom": "${var.decision_tree_db_service_account_password_arn}"
             }
-          }
-      },
-      {
-          "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_DecisionTreeDB",
-          "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-db:2a80cc3-candidate",
-          "requires_compatibilities": "FARGATE",
-          "cpu": 512,
-          "memory": 1024,
-          "essential": true,
-          "networkMode": "awsvpc",
-          "portMappings": [
-              {
-              "containerPort": 7687,
-              "hostPort": 7687
-              }
-          ],
-          "logConfiguration": {
-            "logDriver": "awslogs",
-            "options": {
-                "awslogs-group": "${aws_cloudwatch_log_group.fargate_scale.name}",
-                "awslogs-region": "eu-west-2",
-                "awslogs-stream-prefix": "fargate-neo4j"
+        ],
+        "environment": [
+            {
+                "name": "spring.data.neo4j.uri",
+                "value": "bolt://${var.lb_private_db_dns}:7687"
             }
-          },
-          "environment": [
-            { "name": "NEO4J_AUTH", "value": "neo4j/sbx_graph" }
-          ]
-          }
+        ]
+
+      }
     ]
 DEFINITION
 
@@ -153,6 +135,6 @@ DEFINITION
 }
 
 resource "aws_cloudwatch_log_group" "fargate_scale" {
-  name_prefix       = "/fargate/service/scale/decision-tree"
+  name_prefix       = "/fargate/service/scale/decision-tree-service"
   retention_in_days = 7
 }

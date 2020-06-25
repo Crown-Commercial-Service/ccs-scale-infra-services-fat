@@ -50,3 +50,22 @@ variable "environment" {
   type = string
 }
 
+variable "guided_match_db_endpoint" {
+  type = string
+}
+
+variable "guided_match_db_username" {
+  type = string
+}
+
+variable "guided_match_db_password" {
+  type = string
+}
+
+variable "guided_match_cpu" {
+  type = number
+}
+
+variable "guided_match_memory" {
+  type = number
+}
