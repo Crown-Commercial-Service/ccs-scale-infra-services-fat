@@ -7,8 +7,8 @@ variable "environment" {
 }
 
 variable "ecr_image_id_fat_buyer_ui" {
-  type = string
-  default = "0c90781-candidate"
+  type    = string
+  default = "6f4ed9b-candidate"
 }
 
 variable "decision_tree_service_cpu" {
@@ -39,4 +39,14 @@ variable "guided_match_cpu" {
 variable "guided_match_memory" {
   type    = number
   default = 512
+}
+
+variable "api_rate_limit" {
+  type    = number
+  default = 10000
+}
+
+variable "api_burst_limit" {
+  type    = number
+  default = 5000
 }
