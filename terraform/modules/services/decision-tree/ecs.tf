@@ -58,7 +58,7 @@ resource "aws_ecs_service" "decision_tree" {
   task_definition  = aws_ecs_task_definition.decision_tree.arn
   launch_type      = "FARGATE"
   platform_version = "LATEST"
-  desired_count    = 1
+  desired_count    = length(var.private_app_subnet_ids)
 
   network_configuration {
     security_groups  = [var.ecs_security_group_id]
