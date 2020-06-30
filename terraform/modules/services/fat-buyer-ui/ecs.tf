@@ -119,6 +119,10 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
           {
           "name": "GUIDED_MATCH_SERVICE_API_KEY",
           "value": "${var.fat_api_key}"
+          },
+          {
+          "name": "WEBCMS_ROOT_URL",
+          "value": "${var.webcms_root_url}"
           }
         ]
       }

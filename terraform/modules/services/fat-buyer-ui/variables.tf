@@ -45,3 +45,7 @@ variable "fat_api_key" {
 variable "shared_api_key" {
   type = string
 }
+
+variable "webcms_root_url" {
+  type = string
+}
