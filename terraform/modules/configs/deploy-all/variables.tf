@@ -50,3 +50,10 @@ variable "api_burst_limit" {
   type    = number
   default = 5000
 }
+
+variable "webcms_root_url" {
+  type = string
+
+  # Default to the DEV CMS
+  default = "https://webdev-cms.crowncommercial.gov.uk"
+}

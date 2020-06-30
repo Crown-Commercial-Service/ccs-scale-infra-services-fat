@@ -193,4 +193,5 @@ module "fat-buyer-ui" {
   api_invoke_url            = module.api-deployment.api_invoke_url
   shared_api_key            = data.aws_ssm_parameter.shared_api_key.value
   fat_api_key               = module.api-deployment.fat_api_key
+  webcms_root_url           = var.webcms_root_url
 }
