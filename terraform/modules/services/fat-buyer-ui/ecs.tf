@@ -49,10 +49,7 @@ resource "aws_ecs_service" "fat_buyer_ui" {
   task_definition  = aws_ecs_task_definition.fat_buyer_ui.arn
   launch_type      = "FARGATE"
   platform_version = "LATEST"
-  desired_count    = 1
-  # deployment_controller {
-  #  type = "CODE_DEPLOY"
-  # }
+  desired_count    = length(var.private_app_subnet_ids)
 
   network_configuration {
     security_groups  = [var.ecs_security_group_id]
@@ -111,6 +108,18 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
           {
           "name": "GUIDED_MATCH_SERVICE_ROOT_URL",
           "value": "${var.api_invoke_url}"
+          },
+          {
+          "name": "AGREEMENTS_SERVICE_API_KEY",
+          "value": "${var.shared_api_key}"
+          },
+          {
+          "name": "GUIDED_MATCH_SERVICE_API_KEY",
+          "value": "${var.fat_api_key}"
+          },
+          {
+          "name": "WEBCMS_ROOT_URL",
+          "value": "${var.webcms_root_url}"
           }
         ]
       }

@@ -1,7 +1,12 @@
-variable "scale_rest_api_id" {
-  type = string
-}
+#########################################################
+# Service: API Deployments
+#
+# Creates Usage Plan/API Keys and deployment.
+#########################################################
 
+#########################################################
+# Deployment
+#########################################################
 resource "aws_api_gateway_deployment" "fat" {
   description = "Deployed at ${timestamp()}"
   rest_api_id = var.scale_rest_api_id
@@ -42,4 +47,56 @@ resource "aws_api_gateway_method_settings" "scale" {
 resource "aws_cloudwatch_log_group" "api_gw_execution" {
   name              = "API-Gateway-Execution-Logs_${var.scale_rest_api_id}/${lower(var.environment)}-fat"
   retention_in_days = 7
+}
+
+
+#########################################################
+# Usage Plans
+#########################################################
+resource "aws_api_gateway_usage_plan" "default" {
+  name        = "default-usage-plan"
+  description = "Default Usage Plan"
+
+  api_stages {
+    api_id = var.scale_rest_api_id
+    stage  = aws_api_gateway_stage.fat.stage_name
+  }
+
+  throttle_settings {
+    rate_limit  = var.api_rate_limit
+    burst_limit = var.api_burst_limit
+  }
+}
+
+#########################################################
+# API Keys
+#########################################################
+resource "aws_api_gateway_api_key" "fat_buyer_ui" {
+  name = "FaT Buyer UI API Key (FaT)"
+}
+
+resource "aws_api_gateway_api_key" "fat_testers" {
+  name = "FaT Testers API Key (FaT)"
+}
+
+resource "aws_api_gateway_api_key" "fat_developers" {
+  name = "FaT Developers API Key (FaT)"
+}
+
+resource "aws_api_gateway_usage_plan_key" "fat_buyer_ui" {
+  key_id        = aws_api_gateway_api_key.fat_buyer_ui.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.default.id
+}
+
+resource "aws_api_gateway_usage_plan_key" "fat_testers" {
+  key_id        = aws_api_gateway_api_key.fat_testers.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.default.id
+}
+
+resource "aws_api_gateway_usage_plan_key" "fat_developers" {
+  key_id        = aws_api_gateway_api_key.fat_developers.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.default.id
 }

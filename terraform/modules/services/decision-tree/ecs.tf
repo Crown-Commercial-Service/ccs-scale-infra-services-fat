@@ -58,7 +58,7 @@ resource "aws_ecs_service" "decision_tree" {
   task_definition  = aws_ecs_task_definition.decision_tree.arn
   launch_type      = "FARGATE"
   platform_version = "LATEST"
-  desired_count    = 1
+  desired_count    = length(var.private_app_subnet_ids)
 
   network_configuration {
     security_groups  = [var.ecs_security_group_id]
@@ -85,7 +85,7 @@ resource "aws_ecs_task_definition" "decision_tree" {
     [
     {
         "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_DecisionTreeSvc",
-        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-service:e846d61-candidate",
+        "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-service:c3de761-candidate",
         "requires_compatibilities": "FARGATE",
         "cpu": ${var.decision_tree_service_cpu},
         "memory": ${var.decision_tree_service_memory},
