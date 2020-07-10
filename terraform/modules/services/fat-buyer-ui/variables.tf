@@ -49,3 +49,11 @@ variable "shared_api_key" {
 variable "webcms_root_url" {
   type = string
 }
+
+variable "buyer_ui_cpu" {
+  type = number
+}
+
+variable "buyer_ui_memory" {
+  type = number
+}
