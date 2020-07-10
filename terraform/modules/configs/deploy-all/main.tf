@@ -194,4 +194,6 @@ module "fat-buyer-ui" {
   shared_api_key            = data.aws_ssm_parameter.shared_api_key.value
   fat_api_key               = module.api-deployment.fat_api_key
   webcms_root_url           = var.webcms_root_url
+  buyer_ui_cpu              = var.buyer_ui_cpu
+  buyer_ui_memory           = var.buyer_ui_memory
 }

@@ -68,8 +68,8 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
   family                   = "fat-buyer-ui"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = 512
-  memory                   = 1024
+  cpu                      = var.buyer_ui_cpu
+  memory                   = var.buyer_ui_memory
   execution_role_arn       = var.ecs_task_execution_arn
 
   container_definitions = <<DEFINITION
@@ -78,8 +78,8 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
         "name": "SCALE-EU2-${upper(var.environment)}-APP-ECS_TaskDef_FaTBuyerUI",
         "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/fat-buyer-ui:${var.ecr_image_id_fat_buyer_ui}",
         "requires_compatibilities": "FARGATE",
-        "cpu": 256,
-        "memory": 512,
+        "cpu": ${var.buyer_ui_cpu},
+        "memory": ${var.buyer_ui_memory},
         "essential": true,
         "networkMode": "awsvpc",
         "portMappings": [

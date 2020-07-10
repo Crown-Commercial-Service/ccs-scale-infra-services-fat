@@ -36,5 +36,7 @@ module "deploy" {
   decision_tree_db_memory      = 2048
   guided_match_cpu             = 1024
   guided_match_memory          = 2048
+  buyer_ui_cpu                 = 1024
+  buyer_ui_memory              = 2048
   webcms_root_url              = "https://webuat-cms.crowncommercial.gov.uk/" # Pre-prod
 }

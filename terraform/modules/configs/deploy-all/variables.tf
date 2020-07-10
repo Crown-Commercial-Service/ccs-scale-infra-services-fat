@@ -41,6 +41,16 @@ variable "guided_match_memory" {
   default = 512
 }
 
+variable "buyer_ui_cpu" {
+  type    = number
+  default = 256
+}
+
+variable "buyer_ui_memory" {
+  type    = number
+  default = 512
+}
+
 variable "api_rate_limit" {
   type    = number
   default = 10000
