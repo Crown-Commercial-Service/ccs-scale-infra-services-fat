@@ -197,3 +197,25 @@ module "fat-buyer-ui" {
   buyer_ui_cpu              = var.buyer_ui_cpu
   buyer_ui_memory           = var.buyer_ui_memory
 }
+
+
+module "cloudwatch-alarms-guided-match" {
+  source           = "../../cw-alarms"
+  ecs_cluster_name = module.ecs.ecs_cluster_name
+  ecs_service_name = module.guided-match.ecs_service_name
+  service_name     = "guided-match"
+}
+
+module "cloudwatch-alarms-decision-tree" {
+  source           = "../../cw-alarms"
+  ecs_cluster_name = module.ecs.ecs_cluster_name
+  ecs_service_name = module.decision-tree.ecs_service_name
+  service_name     = "decision-tree"
+}
+
+module "cloudwatch-alarms-fat-buyer-ui" {
+  source           = "../../cw-alarms"
+  ecs_cluster_name = module.ecs.ecs_cluster_name
+  ecs_service_name = module.fat-buyer-ui.ecs_service_name
+  service_name     = "fat-buyer-ui"
+}
