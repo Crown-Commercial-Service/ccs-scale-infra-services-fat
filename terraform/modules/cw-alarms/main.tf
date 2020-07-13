@@ -5,7 +5,7 @@
 #########################################################
 
 resource "aws_sns_topic" "alarms" {
-  name = "CCS-EU2-SBX1-CLOUDTRAIL-ALARMS-${upper(var.service_name)}"
+  name = "CCS-EU2-${upper(var.environment)}-CW-ALARMS-${upper(var.service_name)}"
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu" {
