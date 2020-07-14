@@ -38,5 +38,5 @@ module "deploy" {
   guided_match_memory          = 2048
   buyer_ui_cpu                 = 1024
   buyer_ui_memory              = 2048
-  webcms_root_url              = "https://www.crowncommercial.gov.uk/" # Prod
+  webcms_root_url              = "TODO" # Prod
 }
