@@ -54,11 +54,11 @@ variable "guided_match_db_endpoint" {
   type = string
 }
 
-variable "guided_match_db_username" {
+variable "guided_match_db_username_arn" {
   type = string
 }
 
-variable "guided_match_db_password" {
+variable "guided_match_db_password_arn" {
   type = string
 }
 

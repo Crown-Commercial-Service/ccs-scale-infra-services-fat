@@ -96,6 +96,16 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
               "awslogs-stream-prefix": "fargate-fat-buyer-ui"
           }
         },
+        "secrets": [
+            {
+                "name": "AGREEMENTS_SERVICE_API_KEY",
+                "valueFrom": "${var.shared_api_key_arn}"
+            },
+            {
+                "name": "GUIDED_MATCH_SERVICE_API_KEY",
+                "valueFrom": "${var.fat_api_key_arn}"
+            }
+        ],
         "environment" : [
           {
           "name": "ENVIRONMENT",
@@ -108,14 +118,6 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
           {
           "name": "GUIDED_MATCH_SERVICE_ROOT_URL",
           "value": "${var.api_invoke_url}"
-          },
-          {
-          "name": "AGREEMENTS_SERVICE_API_KEY",
-          "value": "${var.shared_api_key}"
-          },
-          {
-          "name": "GUIDED_MATCH_SERVICE_API_KEY",
-          "value": "${var.fat_api_key}"
           },
           {
           "name": "WEBCMS_ROOT_URL",

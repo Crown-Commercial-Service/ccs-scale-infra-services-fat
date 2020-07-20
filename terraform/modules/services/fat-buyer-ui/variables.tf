@@ -38,11 +38,11 @@ variable "agreements_invoke_url" {
   type = string
 }
 
-variable "fat_api_key" {
+variable "fat_api_key_arn" {
   type = string
 }
 
-variable "shared_api_key" {
+variable "shared_api_key_arn" {
   type = string
 }
 
