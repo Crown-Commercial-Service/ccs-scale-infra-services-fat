@@ -160,8 +160,8 @@ module "guided-match" {
   ecs_task_execution_arn       = module.ecs.ecs_task_execution_arn
   ecs_cluster_id               = module.ecs.ecs_cluster_id
   guided_match_db_endpoint     = data.aws_ssm_parameter.guided_match_db_endpoint.value
-  guided_match_db_username     = data.aws_ssm_parameter.guided_match_db_username.value
-  guided_match_db_password     = data.aws_ssm_parameter.guided_match_db_password.value
+  guided_match_db_username_arn = data.aws_ssm_parameter.guided_match_db_username.arn
+  guided_match_db_password_arn = data.aws_ssm_parameter.guided_match_db_password.arn
   guided_match_cpu             = var.guided_match_cpu
   guided_match_memory          = var.guided_match_memory
 }
@@ -191,8 +191,8 @@ module "fat-buyer-ui" {
   ecr_image_id_fat_buyer_ui = var.ecr_image_id_fat_buyer_ui
   agreements_invoke_url     = data.aws_ssm_parameter.agreements_invoke_url.value
   api_invoke_url            = module.api-deployment.api_invoke_url
-  shared_api_key            = data.aws_ssm_parameter.shared_api_key.value
-  fat_api_key               = module.api-deployment.fat_api_key
+  shared_api_key_arn        = data.aws_ssm_parameter.shared_api_key.arn
+  fat_api_key_arn           = module.api-deployment.fat_api_key_ssm_param_arn
   webcms_root_url           = var.webcms_root_url
   buyer_ui_cpu              = var.buyer_ui_cpu
   buyer_ui_memory           = var.buyer_ui_memory

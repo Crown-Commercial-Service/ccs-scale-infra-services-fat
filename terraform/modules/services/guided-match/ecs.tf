@@ -97,15 +97,17 @@ resource "aws_ecs_task_definition" "guided_match" {
               "awslogs-stream-prefix": "fargate-guided-match"
           }
         },
+        "secrets": [
+            {
+                "name": "spring.datasource.username",
+                "valueFrom": "${var.guided_match_db_username_arn}"
+            },
+            {
+                "name": "spring.datasource.password",
+                "valueFrom": "${var.guided_match_db_password_arn}"
+            }
+        ],
         "environment" : [
-          {
-          "name": "spring.datasource.username",
-          "value": "${var.guided_match_db_username}"
-          },
-          {
-          "name": "spring.datasource.password",
-          "value": "${var.guided_match_db_password}"
-          },
           {
           "name": "spring.datasource.url",
           "value": "jdbc:postgresql://${var.guided_match_db_endpoint}:5432/guided_match"

@@ -83,6 +83,13 @@ resource "aws_api_gateway_api_key" "fat_developers" {
   name = "FaT Developers API Key (FaT)"
 }
 
+resource "aws_ssm_parameter" "fat_buyer_ui_api_key" {
+  name        = "${lower(var.environment)}-fat-buyer-ui-fat-api-key"
+  description = "API Key for FaT Buyer UI component to use to access the Guided Match API (Guied Match Service)"
+  type        = "SecureString"
+  value       = aws_api_gateway_api_key.fat_buyer_ui.value
+}
+
 resource "aws_api_gateway_usage_plan_key" "fat_buyer_ui" {
   key_id        = aws_api_gateway_api_key.fat_buyer_ui.id
   key_type      = "API_KEY"
