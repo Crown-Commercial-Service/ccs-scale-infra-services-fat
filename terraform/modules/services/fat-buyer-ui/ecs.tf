@@ -46,8 +46,30 @@ resource "aws_lb_listener" "port_80" {
   # certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
 
   default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/html"
+      message_body = "<html>Unauthorised</html>"
+      status_code  = "403"
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "authenticate_cloudfront" {
+  listener_arn = aws_lb_listener.port_80.arn
+  priority     = 100
+
+  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group_9030.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name = "CloudFrontID"
+      values           = [var.cloudfront_id]
+    }
   }
 }
 

@@ -61,3 +61,7 @@ variable "buyer_ui_cpu" {
 variable "buyer_ui_memory" {
   type = number
 }
+
+variable "cloudfront_id" {
+  type = string
+}

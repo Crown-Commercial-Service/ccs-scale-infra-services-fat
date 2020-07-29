@@ -97,6 +97,10 @@ data "aws_ssm_parameter" "shared_api_key" {
   name = "${lower(var.environment)}-fat-buyer-ui-shared-api-key"
 }
 
+data "aws_ssm_parameter" "cloudfront_id" {
+  name = "${lower(var.environment)}-cloudfront-id"
+}
+
 module "ecs" {
   source         = "../../ecs"
   vpc_id         = data.aws_ssm_parameter.vpc_id.value
@@ -201,6 +205,7 @@ module "fat-buyer-ui" {
   webcms_root_url           = var.webcms_root_url
   buyer_ui_cpu              = var.buyer_ui_cpu
   buyer_ui_memory           = var.buyer_ui_memory
+  cloudfront_id             = data.aws_ssm_parameter.cloudfront_id.value
 }
 
 
