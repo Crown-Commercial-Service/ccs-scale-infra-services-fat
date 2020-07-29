@@ -50,7 +50,7 @@ resource "aws_lb_listener" "port_80" {
 
     fixed_response {
       content_type = "text/html"
-      message_body = "<html>Unauthorised</html>"
+      message_body = "<html><body>Unauthorised</body></html>"
       status_code  = "403"
     }
   }
@@ -58,7 +58,7 @@ resource "aws_lb_listener" "port_80" {
 
 resource "aws_lb_listener_rule" "authenticate_cloudfront" {
   listener_arn = aws_lb_listener.port_80.arn
-  priority     = 100
+  priority     = 1
 
   action {
     type             = "forward"
