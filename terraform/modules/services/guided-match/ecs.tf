@@ -110,7 +110,7 @@ resource "aws_ecs_task_definition" "guided_match" {
         "environment" : [
           {
           "name": "spring.datasource.url",
-          "value": "jdbc:postgresql://${var.guided_match_db_endpoint}:5432/guided_match"
+          "value": "jdbc:postgresql://${var.guided_match_db_endpoint}:5432/guided_match?connectTimeout=2&cancelSignalTimeout=2&socketTimeout=60&targetServerType=master"
           },
           {
           "name": "external.decision-tree-service.url",
