@@ -8,7 +8,7 @@ variable "environment" {
 
 variable "ecr_image_id_fat_buyer_ui" {
   type    = string
-  default = "6e2d46a-candidate"
+  default = "0a15d62-candidate"
 }
 
 variable "decision_tree_service_cpu" {
