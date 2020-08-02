@@ -65,3 +65,7 @@ variable "buyer_ui_memory" {
 variable "cloudfront_id" {
   type = string
 }
+
+variable "lb_public_alb_listner_arn" {
+  type = string
+}

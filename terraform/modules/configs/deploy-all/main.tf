@@ -101,6 +101,10 @@ data "aws_ssm_parameter" "cloudfront_id" {
   name = "${lower(var.environment)}-cloudfront-id"
 }
 
+data "aws_ssm_parameter" "lb_public_alb_listner_arn" {
+  name = "${lower(var.environment)}-lb-public-alb-listner-arn"
+}
+
 module "ecs" {
   source         = "../../ecs"
   vpc_id         = data.aws_ssm_parameter.vpc_id.value
@@ -206,6 +210,7 @@ module "fat-buyer-ui" {
   buyer_ui_cpu              = var.buyer_ui_cpu
   buyer_ui_memory           = var.buyer_ui_memory
   cloudfront_id             = data.aws_ssm_parameter.cloudfront_id.value
+  lb_public_alb_listner_arn = data.aws_ssm_parameter.lb_public_alb_listner_arn.value
 }
 
 

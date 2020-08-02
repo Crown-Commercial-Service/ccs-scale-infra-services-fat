@@ -35,7 +35,7 @@ resource "aws_lb_target_group" "target_group_9030" {
     AppType     = "LOADBALANCER"
   }
 }
-
+/*
 resource "aws_lb_listener" "port_80" {
   # load_balancer_arn = var.lb_public_arn
   load_balancer_arn = var.lb_public_alb_arn
@@ -69,6 +69,30 @@ resource "aws_lb_listener_rule" "authenticate_cloudfront" {
     http_header {
       http_header_name = "CloudFrontID"
       values           = [var.cloudfront_id]
+    }
+  }
+}
+*/
+
+resource "aws_lb_listener_rule" "authenticate_and_forwrd" {
+  listener_arn = var.lb_public_alb_listner_arn
+  priority     = 1
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group_9030.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name = "CloudFrontID"
+      values           = [var.cloudfront_id]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/guided-match/*"]
     }
   }
 }
