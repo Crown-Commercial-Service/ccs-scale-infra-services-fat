@@ -88,6 +88,7 @@ resource "aws_ssm_parameter" "fat_buyer_ui_api_key" {
   description = "API Key for FaT Buyer UI component to use to access the Guided Match API (Guied Match Service)"
   type        = "SecureString"
   value       = aws_api_gateway_api_key.fat_buyer_ui.value
+  overwrite   = true
 }
 
 resource "aws_api_gateway_usage_plan_key" "fat_buyer_ui" {
