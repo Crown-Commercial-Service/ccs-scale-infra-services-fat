@@ -210,25 +210,28 @@ module "fat-buyer-ui" {
 
 
 module "cloudwatch-alarms-guided-match" {
-  source           = "../../cw-alarms"
-  environment      = var.environment
-  ecs_cluster_name = module.ecs.ecs_cluster_name
-  ecs_service_name = module.guided-match.ecs_service_name
-  service_name     = "guided-match"
+  source                  = "../../cw-alarms"
+  environment             = var.environment
+  ecs_cluster_name        = module.ecs.ecs_cluster_name
+  ecs_service_name        = module.guided-match.ecs_service_name
+  service_name            = "guided-match"
+  ecs_expected_task_count = length(split(",", data.aws_ssm_parameter.private_app_subnet_ids.value))
 }
 
 module "cloudwatch-alarms-decision-tree" {
-  source           = "../../cw-alarms"
-  environment      = var.environment
-  ecs_cluster_name = module.ecs.ecs_cluster_name
-  ecs_service_name = module.decision-tree.ecs_service_name
-  service_name     = "decision-tree"
+  source                  = "../../cw-alarms"
+  environment             = var.environment
+  ecs_cluster_name        = module.ecs.ecs_cluster_name
+  ecs_service_name        = module.decision-tree.ecs_service_name
+  service_name            = "decision-tree"
+  ecs_expected_task_count = length(split(",", data.aws_ssm_parameter.private_app_subnet_ids.value))
 }
 
 module "cloudwatch-alarms-fat-buyer-ui" {
-  source           = "../../cw-alarms"
-  environment      = var.environment
-  ecs_cluster_name = module.ecs.ecs_cluster_name
-  ecs_service_name = module.fat-buyer-ui.ecs_service_name
-  service_name     = "fat-buyer-ui"
+  source                  = "../../cw-alarms"
+  environment             = var.environment
+  ecs_cluster_name        = module.ecs.ecs_cluster_name
+  ecs_service_name        = module.fat-buyer-ui.ecs_service_name
+  service_name            = "fat-buyer-ui"
+  ecs_expected_task_count = length(split(",", data.aws_ssm_parameter.private_app_subnet_ids.value))
 }

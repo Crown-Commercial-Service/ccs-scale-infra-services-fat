@@ -13,3 +13,7 @@ variable ecs_service_name {
 variable service_name {
   type = string
 }
+
+variable "ecs_expected_task_count" {
+  type = string
+}
