@@ -25,7 +25,7 @@ resource "aws_lb_target_group" "target_group_9030" {
 
   # Required for ALB operating over HTTP
   health_check {
-    path = "/guided-match/landing-page?q=linen"
+    path = "/guided-match/health-check"
   }
 
   tags = {
