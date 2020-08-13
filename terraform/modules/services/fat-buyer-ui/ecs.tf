@@ -7,6 +7,16 @@ module "globals" {
   source = "../../globals"
 }
 
+# Data sources for the ALB custom domain name and SSL certificate
+data "aws_ssm_parameter" "hosted_zone_name_alb" {
+  name = "${lower(var.environment)}-hosted-zone-name-alb"
+}
+
+data "aws_acm_certificate" "alb" {
+  domain   = data.aws_ssm_parameter.hosted_zone_name_alb.value
+  statuses = ["ISSUED"]
+}
+
 #######################################################################
 # NLB target group & listener for traffic on port 9030 (Agreements API)
 #######################################################################
@@ -36,14 +46,12 @@ resource "aws_lb_target_group" "target_group_9030" {
   }
 }
 
-resource "aws_lb_listener" "port_80" {
-  # load_balancer_arn = var.lb_public_arn
+resource "aws_lb_listener" "https_443" {
   load_balancer_arn = var.lb_public_alb_arn
-  port              = "80"
-  # protocol          = "TCP"
-  protocol = "HTTP"
-  # ssl_policy        = "ELBSecurityPolicy-2016-08"
-  # certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
+  certificate_arn   = data.aws_acm_certificate.alb.arn
 
   default_action {
     type = "fixed-response"
@@ -57,7 +65,7 @@ resource "aws_lb_listener" "port_80" {
 }
 
 resource "aws_lb_listener_rule" "authenticate_cloudfront" {
-  listener_arn = aws_lb_listener.port_80.arn
+  listener_arn = aws_lb_listener.https_443.arn
   priority     = 1
 
   action {
