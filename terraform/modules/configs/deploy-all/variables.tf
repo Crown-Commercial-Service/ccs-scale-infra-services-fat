@@ -53,12 +53,12 @@ variable "buyer_ui_memory" {
 
 variable "api_rate_limit" {
   type    = number
-  default = 10000
+  default = 100
 }
 
 variable "api_burst_limit" {
   type    = number
-  default = 5000
+  default = 50
 }
 
 variable "webcms_root_url" {
