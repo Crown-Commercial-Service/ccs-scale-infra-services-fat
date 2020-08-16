@@ -32,10 +32,6 @@ data "aws_ssm_parameter" "vpc_link_id" {
   name = "${lower(var.environment)}-vpc-link-id"
 }
 
-data "aws_ssm_parameter" "lb_public_arn" {
-  name = "${lower(var.environment)}-lb-public-arn"
-}
-
 data "aws_ssm_parameter" "lb_public_alb_arn" {
   name = "${lower(var.environment)}-lb-public-alb-arn"
 }
@@ -192,7 +188,6 @@ module "fat-buyer-ui" {
   environment               = var.environment
   vpc_id                    = data.aws_ssm_parameter.vpc_id.value
   private_app_subnet_ids    = split(",", data.aws_ssm_parameter.private_app_subnet_ids.value)
-  lb_public_arn             = data.aws_ssm_parameter.lb_public_arn.value
   lb_public_alb_arn         = data.aws_ssm_parameter.lb_public_alb_arn.value
   ecs_security_group_id     = module.ecs.ecs_security_group_id
   ecs_task_execution_arn    = module.ecs.ecs_task_execution_arn

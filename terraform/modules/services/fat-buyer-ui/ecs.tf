@@ -21,9 +21,8 @@ data "aws_acm_certificate" "alb" {
 # NLB target group & listener for traffic on port 9030 (Agreements API)
 #######################################################################
 resource "aws_lb_target_group" "target_group_9030" {
-  name = "SCALE-EU2-${upper(var.environment)}-VPC-FaTBuyerUI"
-  port = 9030
-  # protocol    = "TCP"
+  name        = "SCALE-EU2-${upper(var.environment)}-VPC-FaTBuyerUI"
+  port        = 9030
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id
