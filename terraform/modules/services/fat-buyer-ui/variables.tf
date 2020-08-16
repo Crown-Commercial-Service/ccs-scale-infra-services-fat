@@ -22,10 +22,6 @@ variable "ecs_task_execution_arn" {
   type = string
 }
 
-variable "lb_public_arn" {
-  type = string
-}
-
 variable "lb_public_alb_arn" {
   type = string
 }
