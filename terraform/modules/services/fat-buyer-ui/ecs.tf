@@ -11,15 +11,21 @@ module "globals" {
 # NLB target group & listener for traffic on port 9030 (Agreements API)
 #######################################################################
 resource "aws_lb_target_group" "target_group_9030" {
-  name        = "SCALE-EU2-${upper(var.environment)}-VPC-FaTBuyerUI"
-  port        = 9030
-  protocol    = "TCP"
+  name = "SCALE-EU2-${upper(var.environment)}-VPC-FaTBuyerUI"
+  port = 9030
+  # protocol    = "TCP"
+  protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id
 
   stickiness {
     type    = "lb_cookie"
     enabled = false
+  }
+
+  # Required for ALB operating over HTTP
+  health_check {
+    path = "/guided-match/health-check"
   }
 
   tags = {
@@ -31,15 +37,39 @@ resource "aws_lb_target_group" "target_group_9030" {
 }
 
 resource "aws_lb_listener" "port_80" {
-  load_balancer_arn = var.lb_public_arn
+  # load_balancer_arn = var.lb_public_arn
+  load_balancer_arn = var.lb_public_alb_arn
   port              = "80"
-  protocol          = "TCP"
+  # protocol          = "TCP"
+  protocol = "HTTP"
   # ssl_policy        = "ELBSecurityPolicy-2016-08"
   # certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
 
   default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/html"
+      message_body = "<html><body>Unauthorised</body></html>"
+      status_code  = "403"
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "authenticate_cloudfront" {
+  listener_arn = aws_lb_listener.port_80.arn
+  priority     = 1
+
+  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group_9030.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name = "CloudFrontID"
+      values           = [var.cloudfront_id]
+    }
   }
 }
 
