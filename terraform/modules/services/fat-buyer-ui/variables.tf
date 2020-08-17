@@ -26,6 +26,10 @@ variable "lb_public_arn" {
   type = string
 }
 
+variable "lb_public_alb_arn" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }
@@ -56,4 +60,8 @@ variable "buyer_ui_cpu" {
 
 variable "buyer_ui_memory" {
   type = number
+}
+
+variable "cloudfront_id" {
+  type = string
 }

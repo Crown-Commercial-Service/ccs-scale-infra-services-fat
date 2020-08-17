@@ -53,8 +53,8 @@ resource "aws_cloudwatch_metric_alarm" "task" {
   metric_name               = "MemoryUtilization"
   namespace                 = "AWS/ECS"
   period                    = "60"
-  statistic                 = "Average"
-  threshold                 = "3"
+  statistic                 = "SampleCount"
+  threshold                 = var.ecs_expected_task_count
   alarm_description         = "This metric monitors task removals"
   insufficient_data_actions = []
   alarm_actions             = [aws_sns_topic.alarms.arn]
