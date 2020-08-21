@@ -83,7 +83,7 @@ resource "aws_ecs_task_definition" "decision_tree_db" {
     [
       {
           "name": "SCALE-EU2-${upper(var.environment)}-DB-ECS_TaskDef_DecisionTreeDB",
-          "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-db:c39b4c2-candidate",
+          "image": "${module.globals.env_accounts["mgmt"]}.dkr.ecr.eu-west-2.amazonaws.com/scale/decision-tree-db:8a58d6c-candidate",
           "requires_compatibilities": "FARGATE",
           "cpu": ${var.decision_tree_db_cpu},
           "memory": ${var.decision_tree_db_memory},
