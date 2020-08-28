@@ -11,6 +11,21 @@ variable "ecr_image_id_fat_buyer_ui" {
   default = "911fc6e-candidate"
 }
 
+variable "ecr_image_id_guided_match" {
+  type    = string
+  default = "66f3a6a-candidate"
+}
+
+variable "ecr_image_id_decision_tree" {
+  type    = string
+  default = "fa32e3f-candidate"
+}
+
+variable "ecr_image_id_decision_tree_db" {
+  type    = string
+  default = "74edfc7-candidate"
+}
+
 variable "decision_tree_service_cpu" {
   type    = number
   default = 512

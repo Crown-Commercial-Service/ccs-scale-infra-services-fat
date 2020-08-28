@@ -49,3 +49,7 @@ variable "decision_tree_db_service_account_username_arn" {
 variable "decision_tree_db_service_account_password_arn" {
   type = string
 }
+
+variable "ecr_image_id_decision_tree_db" {
+  type = string
+}

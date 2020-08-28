@@ -129,6 +129,7 @@ module "decision-tree" {
   decision_tree_service_memory                  = var.decision_tree_service_memory
   decision_tree_db_service_account_username_arn = data.aws_ssm_parameter.decision_tree_db_service_account_username.arn
   decision_tree_db_service_account_password_arn = data.aws_ssm_parameter.decision_tree_db_service_account_password.arn
+  ecr_image_id_decision_tree                    = var.ecr_image_id_decision_tree
 }
 
 module "decision-tree-db" {
@@ -146,6 +147,7 @@ module "decision-tree-db" {
   decision_tree_db_admin_password_arn           = data.aws_ssm_parameter.decision_tree_db_admin_password.arn
   decision_tree_db_service_account_username_arn = data.aws_ssm_parameter.decision_tree_db_service_account_username.arn
   decision_tree_db_service_account_password_arn = data.aws_ssm_parameter.decision_tree_db_service_account_password.arn
+  ecr_image_id_decision_tree_db                 = var.ecr_image_id_decision_tree_db
 }
 
 module "guided-match" {
@@ -168,6 +170,7 @@ module "guided-match" {
   guided_match_db_password_arn = data.aws_ssm_parameter.guided_match_db_password.arn
   guided_match_cpu             = var.guided_match_cpu
   guided_match_memory          = var.guided_match_memory
+  ecr_image_id_guided_match    = var.ecr_image_id_guided_match
 }
 
 module "api-deployment" {

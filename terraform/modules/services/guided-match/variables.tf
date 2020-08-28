@@ -69,3 +69,7 @@ variable "guided_match_cpu" {
 variable "guided_match_memory" {
   type = number
 }
+
+variable "ecr_image_id_guided_match" {
+  type = string
+}
