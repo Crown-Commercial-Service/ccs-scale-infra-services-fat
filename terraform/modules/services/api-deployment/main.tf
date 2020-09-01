@@ -54,7 +54,7 @@ resource "aws_cloudwatch_log_group" "api_gw_execution" {
 # Usage Plans
 #########################################################
 resource "aws_api_gateway_usage_plan" "default" {
-  name        = "default-usage-plan"
+  name        = "default-usage-plan-fat"
   description = "Default Usage Plan"
 
   api_stages {
