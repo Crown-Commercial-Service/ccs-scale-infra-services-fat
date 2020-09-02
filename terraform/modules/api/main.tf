@@ -83,8 +83,3 @@ resource "aws_api_gateway_resource" "scale" {
   parent_id   = aws_api_gateway_rest_api.scale.root_resource_id
   path_part   = "scale"
 }
-
-resource "aws_cloudwatch_log_group" "api_gw_execution" {
-  name              = "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.scale.id}/dev"
-  retention_in_days = 7
-}
