@@ -39,4 +39,6 @@ module "deploy" {
   buyer_ui_cpu                 = 1024
   buyer_ui_memory              = 2048
   webcms_root_url              = "https://webuat-cms.crowncommercial.gov.uk/" # Pre-prod
+  api_gw_log_retention_in_days = 30
+  ecs_log_retention_in_days    = 30
 }
