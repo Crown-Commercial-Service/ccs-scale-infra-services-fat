@@ -39,4 +39,6 @@ module "deploy" {
   buyer_ui_cpu                 = 1024
   buyer_ui_memory              = 2048
   webcms_root_url              = "https://webprod-cms.crowncommercial.gov.uk/" # Prod
+  api_gw_log_retention_in_days = 30
+  ecs_log_retention_in_days    = 30
 }

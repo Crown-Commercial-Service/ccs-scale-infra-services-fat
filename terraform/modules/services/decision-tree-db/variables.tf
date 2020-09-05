@@ -53,3 +53,7 @@ variable "decision_tree_db_service_account_password_arn" {
 variable "ecr_image_id_decision_tree_db" {
   type = string
 }
+
+variable "ecs_log_retention_in_days" {
+  type = number
+}
