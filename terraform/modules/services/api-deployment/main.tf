@@ -75,6 +75,10 @@ resource "aws_api_gateway_api_key" "fat_buyer_ui" {
   name = "FaT Buyer UI API Key (FaT)"
 }
 
+resource "aws_api_gateway_api_key" "ccs_website" {
+  name = "CCS Website API Key (FaT)"
+}
+
 resource "aws_api_gateway_api_key" "fat_testers" {
   name = "FaT Testers API Key (FaT)"
 }
@@ -88,6 +92,13 @@ resource "aws_ssm_parameter" "fat_buyer_ui_api_key" {
   description = "API Key for FaT Buyer UI component to use to access the Guided Match API (Guied Match Service)"
   type        = "SecureString"
   value       = aws_api_gateway_api_key.fat_buyer_ui.value
+}
+
+resource "aws_ssm_parameter" "ccs_website_api_key" {
+  name        = "${lower(var.environment)}-ccs-website-fat-api-key"
+  description = "API Key for CCS website to use to access the Guided Match API (Guided Match Service)"
+  type        = "SecureString"
+  value       = aws_api_gateway_api_key.ccs_website.value
 }
 
 resource "aws_api_gateway_usage_plan_key" "fat_buyer_ui" {
