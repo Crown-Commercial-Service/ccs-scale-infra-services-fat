@@ -130,6 +130,7 @@ module "decision-tree" {
   decision_tree_db_service_account_username_arn = data.aws_ssm_parameter.decision_tree_db_service_account_username.arn
   decision_tree_db_service_account_password_arn = data.aws_ssm_parameter.decision_tree_db_service_account_password.arn
   ecr_image_id_decision_tree                    = var.ecr_image_id_decision_tree
+  ecs_log_retention_in_days                     = var.ecs_log_retention_in_days
 }
 
 module "decision-tree-db" {
@@ -148,6 +149,7 @@ module "decision-tree-db" {
   decision_tree_db_service_account_username_arn = data.aws_ssm_parameter.decision_tree_db_service_account_username.arn
   decision_tree_db_service_account_password_arn = data.aws_ssm_parameter.decision_tree_db_service_account_password.arn
   ecr_image_id_decision_tree_db                 = var.ecr_image_id_decision_tree_db
+  ecs_log_retention_in_days                     = var.ecs_log_retention_in_days
 }
 
 module "guided-match" {
@@ -171,14 +173,16 @@ module "guided-match" {
   guided_match_cpu             = var.guided_match_cpu
   guided_match_memory          = var.guided_match_memory
   ecr_image_id_guided_match    = var.ecr_image_id_guided_match
+  ecs_log_retention_in_days    = var.ecs_log_retention_in_days
 }
 
 module "api-deployment" {
-  source            = "../../services/api-deployment"
-  environment       = var.environment
-  scale_rest_api_id = module.api.scale_rest_api_id
-  api_rate_limit    = var.api_rate_limit
-  api_burst_limit   = var.api_burst_limit
+  source                       = "../../services/api-deployment"
+  environment                  = var.environment
+  scale_rest_api_id            = module.api.scale_rest_api_id
+  api_rate_limit               = var.api_rate_limit
+  api_burst_limit              = var.api_burst_limit
+  api_gw_log_retention_in_days = var.api_gw_log_retention_in_days
 
   // Simulate depends_on:
   decision_tree_api_gateway_integration = module.decision-tree.decision_tree_api_gateway_integration
@@ -204,6 +208,7 @@ module "fat-buyer-ui" {
   buyer_ui_cpu              = var.buyer_ui_cpu
   buyer_ui_memory           = var.buyer_ui_memory
   cloudfront_id             = data.aws_ssm_parameter.cloudfront_id.value
+  ecs_log_retention_in_days = var.ecs_log_retention_in_days
 }
 
 

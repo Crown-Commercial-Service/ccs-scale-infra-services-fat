@@ -23,7 +23,7 @@ variable "ecr_image_id_decision_tree" {
 
 variable "ecr_image_id_decision_tree_db" {
   type    = string
-  default = "8a8c302-candidate"
+  default = "90820aa-candidate"
 }
 
 variable "decision_tree_service_cpu" {
@@ -81,4 +81,14 @@ variable "webcms_root_url" {
 
   # Default to the DEV CMS
   default = "https://webdev-cms.crowncommercial.gov.uk"
+}
+
+variable "api_gw_log_retention_in_days" {
+  type    = number
+  default = 7
+}
+
+variable "ecs_log_retention_in_days" {
+  type    = number
+  default = 7
 }

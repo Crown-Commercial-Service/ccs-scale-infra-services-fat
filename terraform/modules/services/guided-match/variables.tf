@@ -73,3 +73,7 @@ variable "guided_match_memory" {
 variable "ecr_image_id_guided_match" {
   type = string
 }
+
+variable "ecs_log_retention_in_days" {
+  type = number
+}

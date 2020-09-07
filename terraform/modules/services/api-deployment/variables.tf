@@ -21,3 +21,7 @@ variable "api_rate_limit" {
 variable "api_burst_limit" {
   type = number
 }
+
+variable "api_gw_log_retention_in_days" {
+  type = number
+}
