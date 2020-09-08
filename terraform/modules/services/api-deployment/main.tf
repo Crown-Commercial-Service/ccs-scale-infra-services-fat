@@ -106,6 +106,12 @@ resource "aws_api_gateway_usage_plan_key" "fat_buyer_ui" {
   usage_plan_id = aws_api_gateway_usage_plan.default.id
 }
 
+resource "aws_api_gateway_usage_plan_key" "ccs_website" {
+  key_id        = aws_api_gateway_api_key.ccs_website.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.default.id
+}
+
 resource "aws_api_gateway_usage_plan_key" "fat_testers" {
   key_id        = aws_api_gateway_api_key.fat_testers.id
   key_type      = "API_KEY"
