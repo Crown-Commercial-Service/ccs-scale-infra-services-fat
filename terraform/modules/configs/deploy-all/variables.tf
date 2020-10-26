@@ -24,6 +24,7 @@ variable "ecr_image_id_decision_tree" {
 variable "ecr_image_id_decision_tree_db" {
   type    = string
   default = "00496aa-candidate-release-1-1"
+  # default = "4ad666a-snapshot"
 }
 
 variable "decision_tree_service_cpu" {

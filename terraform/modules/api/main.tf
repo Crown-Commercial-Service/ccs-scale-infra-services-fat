@@ -1,12 +1,18 @@
 #########################################################
 # Infrastructure: API
 #
-# Deploy API Gateway account level resources. 
+# Deploy API Gateway account level resources.
 # API Deployments are done later, after services.
 #########################################################
 module "globals" {
   source = "../globals"
 }
+
+data "aws_vpc_endpoint" "api_gateway" {
+  vpc_id       = var.vpc_id
+  service_name = "com.amazonaws.eu-west-2.execute-api"
+}
+
 # API Gateway account level settings
 resource "aws_api_gateway_account" "this" {
   cloudwatch_role_arn = aws_iam_role.api_gw_cloudwatch_logs_role.arn
@@ -68,6 +74,47 @@ EOF
 resource "aws_api_gateway_rest_api" "scale" {
   name        = "SCALE:EU2:${upper(var.environment)}:API:FAT"
   description = "SCALE API Gateway"
+
+  endpoint_configuration {
+    types            = ["PRIVATE"]
+    vpc_endpoint_ids = [data.aws_vpc_endpoint.api_gateway.id]
+  }
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "execute-api:/*/*/*",
+            "Condition": {
+                "StringNotEquals": {
+                    "aws:SourceVpce": "${data.aws_vpc_endpoint.api_gateway.id}"
+                }
+            }
+        },
+        {
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "execute-api:/*/*/*",
+            "Condition": {
+                "StringNotEquals": {
+                    "aws:SourceVpc": "${var.vpc_id}"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "execute-api:/*/*/*"
+        }
+    ]
+}
+EOF
 
   tags = {
     Project     = module.globals.project_name

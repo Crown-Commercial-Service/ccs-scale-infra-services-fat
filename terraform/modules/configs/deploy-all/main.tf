@@ -107,6 +107,7 @@ module "ecs" {
 module "api" {
   source      = "../../api"
   environment = var.environment
+  vpc_id      = data.aws_ssm_parameter.vpc_id.value
 }
 
 module "decision-tree" {
