@@ -107,6 +107,7 @@ module "ecs" {
 module "api" {
   source      = "../../api"
   environment = var.environment
+  vpc_id      = data.aws_ssm_parameter.vpc_id.value
 }
 
 module "decision-tree" {
@@ -183,12 +184,12 @@ module "api-deployment" {
   api_rate_limit               = var.api_rate_limit
   api_burst_limit              = var.api_burst_limit
   api_gw_log_retention_in_days = var.api_gw_log_retention_in_days
+  scale_rest_api_policy_json   = module.api.scale_rest_api_policy_json
 
   // Simulate depends_on:
   decision_tree_api_gateway_integration = module.decision-tree.decision_tree_api_gateway_integration
   guided_match_api_gateway_integration  = module.guided-match.guided_match_api_gateway_integration
 }
-
 
 module "fat-buyer-ui" {
   source                    = "../../services/fat-buyer-ui"

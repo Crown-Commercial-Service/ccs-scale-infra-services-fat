@@ -7,6 +7,21 @@ module "globals" {
   source = "../globals"
 }
 
+data "aws_vpc_endpoint" "ecr" {
+  vpc_id       = var.vpc_id
+  service_name = "com.amazonaws.eu-west-2.ecr.dkr"
+}
+
+data "aws_vpc_endpoint" "s3" {
+  vpc_id       = var.vpc_id
+  service_name = "com.amazonaws.eu-west-2.s3"
+}
+
+data "aws_vpc_endpoint" "api_gateway" {
+  vpc_id       = var.vpc_id
+  service_name = "com.amazonaws.eu-west-2.execute-api"
+}
+
 resource "aws_ecs_cluster" "scale" {
   name = "SCALE-EU2-${upper(var.environment)}-APP-ECS_FAT"
 
@@ -38,7 +53,7 @@ resource "aws_security_group" "allow_http" {
     protocol    = "tcp"
     cidr_blocks = [var.cidr_block_vpc]
   }
-  
+
   ingress {
     from_port   = 9020
     to_port     = 9020
@@ -61,10 +76,38 @@ resource "aws_security_group" "allow_http" {
   }
 
   egress {
-    from_port   = 0
-    to_port     = 65535
+    from_port   = 7687
+    to_port     = 7687
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.cidr_block_vpc]
+  }
+
+  egress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = [var.cidr_block_vpc]
+  }
+
+  egress {
+    from_port   = 9000
+    to_port     = 9000
+    protocol    = "tcp"
+    cidr_blocks = [var.cidr_block_vpc]
+  }
+
+  # Allow traffic to/from ECR and S3 endpoints via VPC link
+  # https://7thzero.com/blog/limiting-outbound-egress-traffic-while-using-aws-fargate-and-ecr
+  egress {
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = data.aws_vpc_endpoint.ecr.security_group_ids # SG ID of VPC ECR endpoint
+    prefix_list_ids = [data.aws_vpc_endpoint.s3.prefix_list_id]    # Prefix list ID of S3 endpoint
+
+    # TODO: SINF-67 - DO NOT REMOVE '0.0.0.0/0' yet
+    # (Fixed IP range for connection to CCS Web CMS not yet available)
+    cidr_blocks = [var.cidr_block_vpc, "0.0.0.0/0"]
   }
 
   tags = {

@@ -25,3 +25,7 @@ variable "api_burst_limit" {
 variable "api_gw_log_retention_in_days" {
   type = number
 }
+
+variable "scale_rest_api_policy_json" {
+  type = string
+}
