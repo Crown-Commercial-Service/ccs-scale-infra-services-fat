@@ -104,7 +104,10 @@ resource "aws_security_group" "allow_http" {
     protocol        = "tcp"
     security_groups = data.aws_vpc_endpoint.ecr.security_group_ids # SG ID of VPC ECR endpoint
     prefix_list_ids = [data.aws_vpc_endpoint.s3.prefix_list_id]    # Prefix list ID of S3 endpoint
-    cidr_blocks     = [var.cidr_block_vpc]
+
+    # TODO: SINF-67 - DO NOT REMOVE '0.0.0.0/0' yet
+    # (Fixed IP range for connection to CCS Web CMS not yet available)
+    cidr_blocks = [var.cidr_block_vpc, "0.0.0.0/0"]
   }
 
   tags = {
