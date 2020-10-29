@@ -9,7 +9,7 @@ variable "environment" {
 variable "ecr_image_id_fat_buyer_ui" {
   type = string
   # default = "cd75064-candidate-release-1-1"
-  default = "b32d883-snapshot"
+  default = "20e16f0-snapshot"
 }
 
 variable "ecr_image_id_guided_match" {

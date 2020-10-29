@@ -87,17 +87,6 @@ data "aws_iam_policy_document" "rest_api_allow_vpc" {
                     "aws:SourceVpc": "${var.vpc_id}"
                 }
             }
-        },
-        {
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": "execute-api:Invoke",
-            "Resource": "*",
-            "Condition": {
-                "IpAddress": {
-                    "aws:VpcSourceIp": ["192.168.0.0/16", "90.252.146.145/32"]
-                }
-            }
         }
     ]
 }
