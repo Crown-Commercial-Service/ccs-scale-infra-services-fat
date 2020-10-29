@@ -71,6 +71,39 @@ EOF
 }
 
 # API gateway, top-level..
+data "aws_iam_policy_document" "rest_api_allow_vpc" {
+  source_json = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "*",
+            "Condition": {
+                "ForAllValues:StringEquals": {
+                    "aws:SourceVpce": "${data.aws_vpc_endpoint.api_gateway.id}",
+                    "aws:SourceVpc": "${var.vpc_id}"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "*",
+            "Condition": {
+                "IpAddress": {
+                    "aws:VpcSourceIp": ["192.168.0.0/16", "90.252.146.145/32"]
+                }
+            }
+        }
+    ]
+}
+EOF
+}
+
 resource "aws_api_gateway_rest_api" "scale" {
   name        = "SCALE:EU2:${upper(var.environment)}:API:FAT"
   description = "SCALE API Gateway"
@@ -80,41 +113,7 @@ resource "aws_api_gateway_rest_api" "scale" {
     vpc_endpoint_ids = [data.aws_vpc_endpoint.api_gateway.id]
   }
 
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Deny",
-            "Principal": "*",
-            "Action": "execute-api:Invoke",
-            "Resource": "execute-api:/*/*/*",
-            "Condition": {
-                "StringNotEquals": {
-                    "aws:SourceVpce": "${data.aws_vpc_endpoint.api_gateway.id}"
-                }
-            }
-        },
-        {
-            "Effect": "Deny",
-            "Principal": "*",
-            "Action": "execute-api:Invoke",
-            "Resource": "execute-api:/*/*/*",
-            "Condition": {
-                "StringNotEquals": {
-                    "aws:SourceVpc": "${var.vpc_id}"
-                }
-            }
-        },
-        {
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": "execute-api:Invoke",
-            "Resource": "execute-api:/*/*/*"
-        }
-    ]
-}
-EOF
+  policy = data.aws_iam_policy_document.rest_api_allow_vpc.json
 
   tags = {
     Project     = module.globals.project_name

@@ -17,6 +17,11 @@ data "aws_vpc_endpoint" "s3" {
   service_name = "com.amazonaws.eu-west-2.s3"
 }
 
+data "aws_vpc_endpoint" "api_gateway" {
+  vpc_id       = var.vpc_id
+  service_name = "com.amazonaws.eu-west-2.execute-api"
+}
+
 resource "aws_ecs_cluster" "scale" {
   name = "SCALE-EU2-${upper(var.environment)}-APP-ECS_FAT"
 
@@ -99,6 +104,7 @@ resource "aws_security_group" "allow_http" {
     protocol        = "tcp"
     security_groups = data.aws_vpc_endpoint.ecr.security_group_ids # SG ID of VPC ECR endpoint
     prefix_list_ids = [data.aws_vpc_endpoint.s3.prefix_list_id]    # Prefix list ID of S3 endpoint
+    cidr_blocks     = [var.cidr_block_vpc]
   }
 
   tags = {
