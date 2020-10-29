@@ -31,5 +31,5 @@ module "deploy" {
   aws_account_id = data.aws_ssm_parameter.aws_account_id.value
   environment    = local.environment
 
-  # ecr_image_id_fat_buyer_ui = "latest"
+  ecr_image_id_fat_buyer_ui = "latest"
 }
