@@ -1,7 +1,7 @@
 #########################################################
 # Infrastructure: API
 #
-# Deploy API Gateway account level resources. 
+# Deploy API Gateway account level resources.
 # API Deployments are done later, after services.
 #########################################################
 module "globals" {
@@ -68,6 +68,10 @@ EOF
 resource "aws_api_gateway_rest_api" "scale" {
   name        = "SCALE:EU2:${upper(var.environment)}:API:FAT"
   description = "SCALE API Gateway"
+
+  endpoint_configuration {
+    types = ["EDGE"]
+  }
 
   tags = {
     Project     = module.globals.project_name
