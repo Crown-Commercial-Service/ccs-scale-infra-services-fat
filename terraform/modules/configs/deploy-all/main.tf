@@ -97,6 +97,26 @@ data "aws_ssm_parameter" "cloudfront_id" {
   name = "${lower(var.environment)}-cloudfront-id"
 }
 
+data "aws_ssm_parameter" "cidr_blocks_allowed_external_api_gateway" {
+  name = "${lower(var.environment)}-cidr-blocks-allowed-external-api-gateway"
+}
+
+# Get the public IP values for NAT/GW to add to the API gateway allowed list
+data "aws_ssm_parameter" "nat_eip_ids" {
+  name = "${lower(var.environment)}-eip-ids-nat-gateway"
+}
+
+data "aws_eip" "nat_eips" {
+  for_each = toset(split(",", data.aws_ssm_parameter.nat_eip_ids.value))
+
+  id = each.key
+}
+
+locals {
+  # Normalised CIDR blocks (accounting for 'none' i.e. "-" as value in SSM parameter)
+  cidr_blocks_allowed_external_api_gateway = data.aws_ssm_parameter.cidr_blocks_allowed_external_api_gateway.value != "-" ? split(",", data.aws_ssm_parameter.cidr_blocks_allowed_external_api_gateway.value) : []
+}
+
 module "ecs" {
   source         = "../../ecs"
   vpc_id         = data.aws_ssm_parameter.vpc_id.value
@@ -107,6 +127,9 @@ module "ecs" {
 module "api" {
   source      = "../../api"
   environment = var.environment
+
+  # Allow traffic from VPC, NAT and environment specific CIDR ranges (e.g. CCS, CCS web infra etc)
+  cidr_blocks_allowed_external_api_gateway = concat(tolist([data.aws_ssm_parameter.cidr_block_vpc.value]), values(data.aws_eip.nat_eips)[*].public_ip, local.cidr_blocks_allowed_external_api_gateway)
 }
 
 module "decision-tree" {
@@ -183,6 +206,7 @@ module "api-deployment" {
   api_rate_limit               = var.api_rate_limit
   api_burst_limit              = var.api_burst_limit
   api_gw_log_retention_in_days = var.api_gw_log_retention_in_days
+  scale_rest_api_policy_json   = module.api.scale_rest_api_policy_json
 
   // Simulate depends_on:
   decision_tree_api_gateway_integration = module.decision-tree.decision_tree_api_gateway_integration
