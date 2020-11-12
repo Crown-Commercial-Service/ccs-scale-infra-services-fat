@@ -65,6 +65,27 @@ EOF
 }
 
 # API gateway, top-level..
+data "aws_iam_policy_document" "scale" {
+  source_json = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "*",
+            "Condition" : {
+                "IpAddress": {
+                    "aws:SourceIp": ${jsonencode(var.cidr_blocks_allowed_external_api_gateway)}
+                }
+            }
+        }
+    ]
+}
+EOF
+}
+
 resource "aws_api_gateway_rest_api" "scale" {
   name        = "SCALE:EU2:${upper(var.environment)}:API:FAT"
   description = "SCALE API Gateway"
@@ -73,11 +94,24 @@ resource "aws_api_gateway_rest_api" "scale" {
     types = ["EDGE"]
   }
 
+  policy = data.aws_iam_policy_document.scale.json
+
   tags = {
     Project     = module.globals.project_name
     Environment = upper(var.environment)
     Cost_Code   = module.globals.project_cost_code
     AppType     = "APIGATEWAY"
+  }
+}
+
+# Default Access Denied gateway response exposes info about the API so replace it.
+resource "aws_api_gateway_gateway_response" "access_denied" {
+  rest_api_id   = aws_api_gateway_rest_api.scale.id
+  status_code   = "403"
+  response_type = "ACCESS_DENIED"
+
+  response_templates = {
+    "application/json" = jsonencode({ "message" = "Access denied" })
   }
 }
 
