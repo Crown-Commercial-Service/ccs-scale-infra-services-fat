@@ -45,31 +45,12 @@ resource "aws_lb_target_group" "target_group_9030" {
   }
 }
 
-resource "aws_lb_listener" "https_443" {
-  load_balancer_arn = var.lb_public_alb_arn
-  port              = "4463"
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
-  certificate_arn   = data.aws_acm_certificate.alb.arn
-
-  default_action {
-    type = "fixed-response"
-
-    fixed_response {
-      content_type = "text/html"
-      message_body = "<html><body>Unauthorised</body></html>"
-      status_code  = "403"
-    }
-  }
+data "aws_ssm_parameter" "external_alb_port_443_listener_arn" {
+  name = "${lower(var.environment)}-ext-alb-port-443-listener-arn"
 }
 
-# data "aws_ssm_parameter" "external_alb_port_443_listener_arn" {
-#   name = "${lower(var.environment)}-ext-alb-port-443-listener-arn"
-# }
-
 resource "aws_lb_listener_rule" "authenticate_cloudfront" {
-  listener_arn = aws_lb_listener.https_443.arn
-  # listener_arn = data.aws_ssm_parameter.external_alb_port_443_listener_arn.value
+  listener_arn = data.aws_ssm_parameter.external_alb_port_443_listener_arn.value
   # priority     = 1
 
   action {
