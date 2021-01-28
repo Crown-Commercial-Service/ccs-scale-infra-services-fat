@@ -94,7 +94,7 @@ data "aws_ssm_parameter" "shared_api_key" {
 }
 
 data "aws_ssm_parameter" "cloudfront_id" {
-  name = "${lower(var.environment)}-cloudfront-id"
+  name = "${lower(var.environment)}-fat-buyer-ui-cloudfront-id"
 }
 
 data "aws_ssm_parameter" "cidr_blocks_allowed_external_api_gateway" {
