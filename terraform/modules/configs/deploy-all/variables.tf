@@ -13,7 +13,7 @@ variable "ecr_image_id_fat_buyer_ui" {
 
 variable "ecr_image_id_guided_match" {
   type    = string
-  default = "00ac500-candidate-release-1-1"
+  default = "cb3e422-candidate"
 }
 
 variable "ecr_image_id_decision_tree" {
@@ -23,7 +23,7 @@ variable "ecr_image_id_decision_tree" {
 
 variable "ecr_image_id_decision_tree_db" {
   type    = string
-  default = "00496aa-candidate-release-1-1"
+  default = "2cb9369-candidate"
 }
 
 variable "decision_tree_service_cpu" {
