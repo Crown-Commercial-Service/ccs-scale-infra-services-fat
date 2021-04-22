@@ -50,7 +50,7 @@ resource "aws_ecs_service" "decision_tree_db" {
   cluster          = var.ecs_cluster_id
   task_definition  = aws_ecs_task_definition.decision_tree_db.arn
   launch_type      = "FARGATE"
-  platform_version = "LATEST"
+  platform_version = "1.3.0"
   desired_count    = length(var.private_db_subnet_ids)
 
   network_configuration {
