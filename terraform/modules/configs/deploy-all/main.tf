@@ -84,6 +84,10 @@ data "aws_ssm_parameter" "decision_tree_db_service_account_password" {
   name = "${lower(var.environment)}-decision-tree-db-service-account-password"
 }
 
+data "aws_ssm_parameter" "rollbar_access_token" {
+  name = "${lower(var.environment)}-rollbar-access-token"
+}
+
 
 data "aws_ssm_parameter" "cidr_block_vpc" {
   name = "${lower(var.environment)}-cidr-block-vpc"
