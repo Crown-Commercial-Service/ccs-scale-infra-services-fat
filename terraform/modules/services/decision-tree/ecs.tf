@@ -108,6 +108,10 @@ resource "aws_ecs_task_definition" "decision_tree" {
             {
                 "name": "spring.data.neo4j.password",
                 "valueFrom": "${var.decision_tree_db_service_account_password_arn}"
+            },
+            {
+                "name": "rollbar.access.token",
+                "valueFrom": "${var.rollbar_access_token}"
             }
         ],
         "environment": [
