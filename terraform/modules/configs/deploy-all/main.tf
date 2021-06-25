@@ -158,6 +158,7 @@ module "decision-tree" {
   decision_tree_db_service_account_password_arn = data.aws_ssm_parameter.decision_tree_db_service_account_password.arn
   ecr_image_id_decision_tree                    = var.ecr_image_id_decision_tree
   ecs_log_retention_in_days                     = var.ecs_log_retention_in_days
+  rollbar_access_token                          = data.aws_ssm_parameter.rollbar_access_token.arn
 }
 
 module "decision-tree-db" {
