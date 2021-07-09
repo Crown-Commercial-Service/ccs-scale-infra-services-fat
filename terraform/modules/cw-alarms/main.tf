@@ -5,7 +5,8 @@
 #########################################################
 
 resource "aws_sns_topic" "alarms" {
-  name = "CCS-EU2-${upper(var.environment)}-CW-ALARMS-${upper(var.service_name)}"
+  name              = "CCS-EU2-${upper(var.environment)}-CW-ALARMS-${upper(var.service_name)}"
+  kms_master_key_id = "alias/aws/sns"
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu" {
