@@ -65,3 +65,7 @@ variable "cloudfront_id" {
 variable "ecs_log_retention_in_days" {
   type = number
 }
+
+variable "rollbar_access_token" {
+  type = string
+}

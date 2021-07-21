@@ -84,6 +84,10 @@ data "aws_ssm_parameter" "decision_tree_db_service_account_password" {
   name = "${lower(var.environment)}-decision-tree-db-service-account-password"
 }
 
+data "aws_ssm_parameter" "rollbar_access_token" {
+  name = "${lower(var.environment)}-rollbar-access-token"
+}
+
 
 data "aws_ssm_parameter" "cidr_block_vpc" {
   name = "${lower(var.environment)}-cidr-block-vpc"
@@ -154,6 +158,7 @@ module "decision-tree" {
   decision_tree_db_service_account_password_arn = data.aws_ssm_parameter.decision_tree_db_service_account_password.arn
   ecr_image_id_decision_tree                    = var.ecr_image_id_decision_tree
   ecs_log_retention_in_days                     = var.ecs_log_retention_in_days
+  rollbar_access_token                          = data.aws_ssm_parameter.rollbar_access_token.arn
 }
 
 module "decision-tree-db" {
@@ -195,6 +200,7 @@ module "guided-match" {
   guided_match_db_password_arn = data.aws_ssm_parameter.guided_match_db_password.arn
   guided_match_cpu             = var.guided_match_cpu
   guided_match_memory          = var.guided_match_memory
+  rollbar_access_token         = data.aws_ssm_parameter.rollbar_access_token.arn
   ecr_image_id_guided_match    = var.ecr_image_id_guided_match
   ecs_log_retention_in_days    = var.ecs_log_retention_in_days
 }
@@ -233,6 +239,7 @@ module "fat-buyer-ui" {
   buyer_ui_memory           = var.buyer_ui_memory
   cloudfront_id             = data.aws_ssm_parameter.cloudfront_id.value
   ecs_log_retention_in_days = var.ecs_log_retention_in_days
+  rollbar_access_token      = data.aws_ssm_parameter.rollbar_access_token.arn
 }
 
 

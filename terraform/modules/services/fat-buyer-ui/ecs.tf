@@ -157,6 +157,10 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
           "value": "${var.api_invoke_url}"
           },
           {
+          "name": "ROLLBAR_ACCESS_TOKEN",
+          "value": "${var.rollbar_access_token}"
+          },
+          {
           "name": "WEBCMS_ROOT_URL",
           "value": "${var.webcms_root_url}"
           }

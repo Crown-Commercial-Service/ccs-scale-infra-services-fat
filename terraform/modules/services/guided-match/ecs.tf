@@ -100,6 +100,10 @@ resource "aws_ecs_task_definition" "guided_match" {
             {
                 "name": "spring.datasource.password",
                 "valueFrom": "${var.guided_match_db_password_arn}"
+            },
+            {
+                "name": "rollbar.access.token",
+                "valueFrom": "${var.rollbar_access_token}"
             }
         ],
         "environment" : [
