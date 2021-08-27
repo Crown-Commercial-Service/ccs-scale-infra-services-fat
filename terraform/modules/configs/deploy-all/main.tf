@@ -239,7 +239,7 @@ module "fat-buyer-ui" {
   buyer_ui_memory           = var.buyer_ui_memory
   cloudfront_id             = data.aws_ssm_parameter.cloudfront_id.value
   ecs_log_retention_in_days = var.ecs_log_retention_in_days
-  rollbar_access_token      = data.aws_ssm_parameter.rollbar_access_token.arn
+  rollbar_access_token_arn  = data.aws_ssm_parameter.rollbar_access_token.arn
 }
 
 
