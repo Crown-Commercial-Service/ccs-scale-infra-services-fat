@@ -141,6 +141,10 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
             {
                 "name": "GUIDED_MATCH_SERVICE_API_KEY",
                 "valueFrom": "${var.fat_api_key_arn}"
+            },
+            {
+                "name": "ROLLBAR_ACCESS_TOKEN",
+                "valueFrom": "${var.rollbar_access_token_arn}"
             }
         ],
         "environment" : [
@@ -155,10 +159,6 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
           {
           "name": "GUIDED_MATCH_SERVICE_ROOT_URL",
           "value": "${var.api_invoke_url}"
-          },
-          {
-          "name": "ROLLBAR_ACCESS_TOKEN",
-          "value": "${var.rollbar_access_token}"
           },
           {
           "name": "WEBCMS_ROOT_URL",
