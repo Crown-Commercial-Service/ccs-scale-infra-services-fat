@@ -153,10 +153,6 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
           "value": "${var.environment}"
           },
           {
-          "name": "APP_ENV",
-          "value": "${var.environment}"
-          },
-          {
           "name": "AGREEMENTS_SERVICE_ROOT_URL",
           "value": "${var.agreements_invoke_url}"
           },
