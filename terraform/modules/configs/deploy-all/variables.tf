@@ -18,7 +18,7 @@ variable "ecr_image_id_guided_match" {
 
 variable "ecr_image_id_decision_tree" {
   type    = string
-  default = "cb0ab58-candidate"
+  default = "63eca62-candidate"
 }
 
 variable "ecr_image_id_decision_tree_db" {
