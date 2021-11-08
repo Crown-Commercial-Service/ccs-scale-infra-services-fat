@@ -18,12 +18,12 @@ variable "ecr_image_id_guided_match" {
 
 variable "ecr_image_id_decision_tree" {
   type    = string
-  default = "63eca62-candidate"
+  default = "cb0ab58-candidate"
 }
 
 variable "ecr_image_id_decision_tree_db" {
   type    = string
-  default = "c499c53-candidate"
+  default = "63eca62-candidate"
 }
 
 variable "decision_tree_service_cpu" {
