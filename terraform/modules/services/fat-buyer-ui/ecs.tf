@@ -154,7 +154,7 @@ resource "aws_ecs_task_definition" "fat_buyer_ui" {
           },
           {
           "name": "APP_ENV",
-          "value": "${var.environment}" == "tst" ? "prod" : "${var.environment}"
+          "value": "${var.environment == "tst" ? "prod" : var.environment}"
           },
           {
           "name": "AGREEMENTS_SERVICE_ROOT_URL",
