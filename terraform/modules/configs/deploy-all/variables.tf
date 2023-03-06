@@ -23,7 +23,7 @@ variable "ecr_image_id_decision_tree" {
 
 variable "ecr_image_id_decision_tree_db" {
   type    = string
-  default = "7f5727e-candidate"
+  default = "d902c44-candidate"
 }
 
 variable "decision_tree_service_cpu" {
