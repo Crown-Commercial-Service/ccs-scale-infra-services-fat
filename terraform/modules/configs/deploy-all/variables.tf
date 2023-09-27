@@ -8,7 +8,7 @@ variable "environment" {
 
 variable "ecr_image_id_fat_buyer_ui" {
   type    = string
-  default = "15f5f1f-candidate"
+  default = "b5e0f6d-candidate"
 }
 
 variable "ecr_image_id_guided_match" {
