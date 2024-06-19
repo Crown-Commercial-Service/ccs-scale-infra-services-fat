@@ -13,12 +13,12 @@ variable "ecr_image_id_fat_buyer_ui" {
 
 variable "ecr_image_id_guided_match" {
   type    = string
-  default = "5170039-candidate"
+  default = "9da7980-candidate"
 }
 
 variable "ecr_image_id_decision_tree" {
   type    = string
-  default = "cb0ab58-candidate"
+  default = "27a182f-candidate"
 }
 
 variable "ecr_image_id_decision_tree_db" {
