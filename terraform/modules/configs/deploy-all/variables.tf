@@ -8,7 +8,7 @@ variable "environment" {
 
 variable "ecr_image_id_fat_buyer_ui" {
   type    = string
-  default = "a99bf2b-candidate"
+  default = "230ff66-candidate"
 }
 
 variable "ecr_image_id_guided_match" {
@@ -23,7 +23,7 @@ variable "ecr_image_id_decision_tree" {
 
 variable "ecr_image_id_decision_tree_db" {
   type    = string
-  default = "cc049c7-candidate"
+  default = "525a5c0-candidate"
 }
 
 variable "decision_tree_service_cpu" {
